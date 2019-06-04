@@ -30,6 +30,12 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
+save environment url:
+  environment:
+    name: staging
+  script:
+    - echo $CI_ENVIRONMENT_URL > environment_url.txt
+
 run postman collection:
   stage: validation
   image: 
