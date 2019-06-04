@@ -30,6 +30,13 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
+env url output:
+  script:
+  - $CI_ENVIRONMENT_URL >> CI_ENVIRONMENT_URL.txt
+  only:
+    variables:
+      - $CI_ENVIRONMENT_URL != ""
+
 run postman collection:
   stage: validation
   image: 
@@ -37,6 +44,7 @@ run postman collection:
     entrypoint: ["/bin/sh", "-c"]
   allow_failure: true
   script:
+  - export CI_ENVIRONMENT_URL=$(cat CI_ENVIRONMENT_URL.txt)
   - sed -i 's/$CI_ENVIRONMENT_URL/'"$CI_ENVIRONMENT_URL"'/g' $COLLECTION_VARS
   - cat $COLLECTION_VARS
   - newman --version
