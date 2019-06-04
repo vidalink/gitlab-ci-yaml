@@ -38,5 +38,6 @@ run postman collection:
   allow_failure: true
   script:
   - sed -i 's/$CI_ENVIRONMENT_URL/'"$CI_ENVIRONMENT_URL"'/g' $COLLECTION_VARS
+  - cat $COLLECTION_VARS
   - newman --version
   - newman run $COLLECTION -e $COLLECTION_VARS
