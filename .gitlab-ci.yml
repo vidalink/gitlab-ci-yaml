@@ -38,7 +38,7 @@ postman:
   allow_failure: true
   script:
   - export ENV_URL=http://$CI_PROJECT_ID-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
-  - cat ENV_URL
+  - echo $ENV_URL
   - sed -i 's/$CI_ENVIRONMENT_URL/'"$ENV_URL"'/g' $COLLECTION_VARS
   - newman --version
   - newman run $COLLECTION -e $COLLECTION_VARS
@@ -53,7 +53,7 @@ postman:
   allow_failure: true
   script:
   - export ENV_URL=http://$CI_PROJECT_PATH_SLUG-staging.$KUBE_INGRESS_BASE_DOMAIN
-  - cat ENV_URL
+  - echo $ENV_URL
   - sed -i 's/$CI_ENVIRONMENT_URL/'"$ENV_URL"'/g' $COLLECTION_VARS
   - newman --version
   - newman run $COLLECTION -e $COLLECTION_VARS
