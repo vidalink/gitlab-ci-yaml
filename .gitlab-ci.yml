@@ -7,6 +7,8 @@ variables:
   PERFORMANCE_DISABLED: "true"
   POSTGRES_ENABLED: "false"
   TEST_DISABLED: "true"
+  COLLECTION: collection.json
+  COLLECTION_VARS: collection_vars.json
 
 stages:
   - build
@@ -36,4 +38,4 @@ run postman collection:
   allow_failure: true
   script:
   - newman --version
-  - newman run collection.json -e prod.postman_environment.json
+  - newman run $COLLECTION -e $COLLECTION_VARS
