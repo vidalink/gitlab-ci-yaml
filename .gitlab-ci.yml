@@ -30,12 +30,17 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
-env url output:
+env url staging:
+  stage: staging
   script:
   - $CI_ENVIRONMENT_URL >> CI_ENVIRONMENT_URL.txt
-  only:
-    variables:
-      - $CI_ENVIRONMENT_URL != ""
+  - cat CI_ENVIRONMENT_URL.txt
+
+env url review:
+  stage: review
+  script:
+  - $CI_ENVIRONMENT_URL >> CI_ENVIRONMENT_URL.txt
+  - cat CI_ENVIRONMENT_URL.txt
 
 run postman collection:
   stage: validation
