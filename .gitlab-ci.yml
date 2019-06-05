@@ -30,9 +30,6 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
-before_script:
-  - export HAS_POSTMAN=$([ -f $COLLECTION ] && [ -f $COLLECTION_VARS ] && echo "OK" || echo "NOK")
-
 postman:
   stage: validation
   image: 
@@ -49,4 +46,4 @@ postman:
     - master
   only:
     variables:
-      - $HAS_POSTMAN == 'OK'
+      - $POSTMAN_ENABLED
