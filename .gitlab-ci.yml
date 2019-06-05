@@ -44,3 +44,9 @@ postman:
   - newman run $COLLECTION -e $COLLECTION_VARS
   environment:
     name: review
+  only:
+    refs:
+      - branches
+    variables:
+      - $COLLECTION
+      - $COLLECTION_VARS
