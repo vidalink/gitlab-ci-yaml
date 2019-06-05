@@ -16,3 +16,7 @@ Yaml para pipeline do gitlab com newman (postman).
 - Review
 - Validation
 - Cleanup
+
+# Variáveis
+
+- $POSTMAN_DISABLED -> por padrão, vem habilitado.
