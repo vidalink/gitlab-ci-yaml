@@ -45,8 +45,9 @@ postman:
   - sed -i 's#$CI_ENVIRONMENT_URL#'"$ENV_URL"'#g' $COLLECTION_VARS
   - newman --version
   - newman run $COLLECTION -e $COLLECTION_VARS
+  only:
+    - branches
+  variables:
+    - $HAS_POSTMAN == 'OK'
   except:
-    refs:
-      - master
-    variables:
-      - $HAS_POSTMAN == 'OK'
+    - master
