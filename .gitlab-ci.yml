@@ -43,7 +43,7 @@ postman:
     - newman --version
     - newman run $COLLECTION -e $COLLECTION_VARS
   except:
-    - master
-  only:
+    refs:
+      - master
     variables:
       - $POSTMAN_ENABLED
