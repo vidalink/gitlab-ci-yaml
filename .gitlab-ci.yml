@@ -46,7 +46,7 @@ postman:
   - newman --version
   - newman run $COLLECTION -e $COLLECTION_VARS
   only:
-    refs
+    refs:
       - branches
     variables:
       - $HAS_POSTMAN == 'OK'
