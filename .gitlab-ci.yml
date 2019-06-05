@@ -49,4 +49,4 @@ postman:
     refs:
       - master
     variables:
-      - $HAS_POSTMAN == "OK"
+      - $HAS_POSTMAN == 'OK'
