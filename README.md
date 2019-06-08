@@ -6,7 +6,6 @@ Yaml para pipeline do gitlab com newman (postman).
 
 - Build
 - Staging
-- Validation
 - Production
 - Rollout ...%
 
