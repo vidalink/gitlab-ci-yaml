@@ -37,9 +37,7 @@ postman:
     entrypoint: ["/bin/sh", "-c"]
   allow_failure: true
   script:
-    - export ENV_URL=http://$CI_PROJECT_ID-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
-    - echo $ENV_URL
-    - sed -i 's#$CI_ENVIRONMENT_URL#'"$ENV_URL"'#g' $COLLECTION_VARS
+    - sed -i 's#%%URL%%#'"$CI_ENVIRONMENT_URL"'#g' $COLLECTION_VARS
     - newman --version
     - newman run $COLLECTION -e $COLLECTION_VARS
   only:
