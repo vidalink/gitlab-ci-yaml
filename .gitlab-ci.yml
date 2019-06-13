@@ -44,8 +44,8 @@ postman:
   only:
     refs:
       - branches
-#  except:
-#    refs:
-#      - master
+  except:
+    refs:
+      - master
     variables:
       - $POSTMAN_DISABLED
