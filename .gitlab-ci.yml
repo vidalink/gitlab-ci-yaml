@@ -37,14 +37,16 @@ postman:
     entrypoint: ["/bin/sh", "-c"]
   allow_failure: true
   script:
+    - export CI_ENVIRONMENT_URL=$(cat environment_url.txt)
     - sed -i 's#%%URL%%#'"$CI_ENVIRONMENT_URL"'#g' $COLLECTION_VARS
     - newman --version
     - newman run $COLLECTION -e $COLLECTION_VARS
   only:
     refs:
       - branches
-  except:
-    refs:
-      - master
+    kubernetes: active
+#  except:
+#    refs:
+#      - master
     variables:
       - $POSTMAN_DISABLED
