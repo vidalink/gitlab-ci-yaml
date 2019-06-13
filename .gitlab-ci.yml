@@ -44,7 +44,6 @@ postman:
   only:
     refs:
       - branches
-    kubernetes: active
 #  except:
 #    refs:
 #      - master
