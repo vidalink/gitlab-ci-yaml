@@ -65,7 +65,7 @@ quality:
     - dotnet sonarscanner begin /k:"${SONAR_K}"  /d:sonar.host.url="${SONAR_HOST_URL}" /d:sonar.language="cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*" /d:sonar.login="${SONAR_LOGIN}"  /d:sonar.cs.opencover.reportsPaths="${PROJECT_TEST_PATH}/coverage.opencover.xml" /d:sonar.coverage.exclusions="**Tests*.cs"
     - echo ${PROJECT_TEST_PATH}
     - ls
-    - dotnet restore --configfile ${PROJECT_TEST_PATH}/nuget.config Test
+    - dotnet restore --configfile ${PROJECT_TEST_PATH}/nuget.config ${PROJECT_TEST_CSPROJ}
     - dotnet build
     - dotnet sonarscanner end /d:sonar.login=${SONAR_LOGIN}
   only:
