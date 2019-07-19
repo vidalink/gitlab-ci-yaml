@@ -63,6 +63,7 @@ quality:
     - export PATH=${PATH}:/root/.dotnet/tools
     - dotnet test ${PROJECT_TEST_PATH} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
     - dotnet sonarscanner begin /k:"${SONAR_K}"  /d:sonar.host.url="${SONAR_HOST_URL}" /d:sonar.language="cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*" /d:sonar.login="${SONAR_LOGIN}"  /d:sonar.cs.opencover.reportsPaths="${PROJECT_TEST_PATH}/coverage.opencover.xml" /d:sonar.coverage.exclusions="**Tests*.cs"
+    - echo ${PROJECT_TEST_PATH}
     - ls
     - dotnet restore --configfile ${PROJECT_TEST_PATH}/nuget.config Test
     - dotnet build
