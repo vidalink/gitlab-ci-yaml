@@ -9,6 +9,7 @@ variables:
   TEST_DISABLED: "true"
   COLLECTION: collection.json
   COLLECTION_VARS: collection_vars.json
+  COLLECTION_SCENARIOS: collection_scenarios.json
 
 stages:
   - build
@@ -41,7 +42,7 @@ postman:
     - export CI_ENVIRONMENT_URL=$(cat environment_url.txt)
     - sed -i 's#%%URL%%#'"$CI_ENVIRONMENT_URL"'#g' $COLLECTION_VARS
     - newman --version
-    - newman run $COLLECTION -e $COLLECTION_VARS
+    - newman run $COLLECTION -e $COLLECTION_VARS -d $COLLECTION_SCENARIOS
   only:
     refs:
       - branches
