@@ -56,7 +56,7 @@ postman:
 quality:
   stage: quality gate
   image:
-    name: microsoft/dotnet:2.2-sdk-alpine
+    name: mcr.microsoft.com/dotnet/core/sdk:2.2
     entrypoint: ["/bin/sh", "-c"]
   allow_failure: true
   script:
