@@ -42,7 +42,6 @@ postman:
     - export CI_ENVIRONMENT_URL=$(cat environment_url.txt)
     - sed -i 's#%%URL%%#'"$CI_ENVIRONMENT_URL"'#g' $COLLECTION_VARS
     - newman --version
-    - newman run $COLLECTION -e $COLLECTION_VARS --folder Legacy
     - newman run $COLLECTION -e $COLLECTION_VARS --folder Current -d $COLLECTION_SCENARIOS
   only:
     refs:
