@@ -1,4 +1,6 @@
-﻿"use strict";
+//Convert object (JSON) fields to string in order to run using Newman
+
+"use strict";
 const oldFile = process.argv[2];
 const newFile = process.argv[3];
 
