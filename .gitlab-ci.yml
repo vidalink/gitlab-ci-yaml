@@ -75,5 +75,6 @@ quality:
   except:
     refs:
       - master
+      - SWAGGERHUB
     variables:
       - $SONAR_DISABLED
