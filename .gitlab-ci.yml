@@ -7,8 +7,8 @@ variables:
   PERFORMANCE_DISABLED: "true"
   POSTGRES_ENABLED: "false"
   TEST_DISABLED: "true"
-  COLLECTION: collection.json
-  COLLECTION_VARS: collection_vars.json
+  #COLLECTION: collection.json
+  #COLLECTION_VARS: collection_vars.json
   COLLECTION_SCENARIOS: collection_scenarios.json
 
 stages:
@@ -42,17 +42,21 @@ postman:
     - export CI_ENVIRONMENT_URL=$(cat environment_url.txt)
     - sed -i 's#%%URL%%#'"$CI_ENVIRONMENT_URL"'#g' $COLLECTION_VARS
     - wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/convert_test_cases.js -O convert_test_cases.js
-    - [ ! -e "$COLLECTION_SCENARIOS" ] || node convert_test_cases $COLLECTION_SCENARIOS converted_scenarios.json
     - newman --version
-    - newman run $COLLECTION -e $COLLECTION_VARS --folder Current $(`if [ -e "$COLLECTION_SCENARIOS" ]; then echo "-d converted_scenarios.json"; fi`) --delay-request 100
+    - [ ! -e "$COLLECTION_SCENARIOS" ] || node convert_test_cases $COLLECTION_SCENARIOS converted_scenarios.json
+    - [ -e "$COLLECTION_SCENARIOS" ] || newman run $COLLECTION -e $COLLECTION_VARS --folder Current -d converted_scenarios.json --delay-request 100
+    - [ ! -e "$COLLECTION_SCENARIOS" ] || newman run $COLLECTION -e $COLLECTION_VARS --delay-request 100
   only:
     refs:
       - branches
+    variables:
+      - $COLLECTION
+      - $COLLECTION_VARS
   except:
     refs:
       - master
-    variables:
-      - $POSTMAN_DISABLED
+    #variables:
+      #- $POSTMAN_DISABLED
 
 quality:
   stage: quality gate
