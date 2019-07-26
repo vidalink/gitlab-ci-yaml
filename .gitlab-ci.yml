@@ -7,7 +7,7 @@ variables:
   PERFORMANCE_DISABLED: "true"
   POSTGRES_ENABLED: "false"
   TEST_DISABLED: "true"
-  COLLECTION_SCENARIOS: collection_scenarios.json
+  #COLLECTION_SCENARIOS: collection_scenarios.json
 
 stages:
   - build
@@ -41,9 +41,28 @@ postman:
     - sed -i 's#%%URL%%#'"$CI_ENVIRONMENT_URL"'#g' $COLLECTION_VARS
     - wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/convert_test_cases.js -O convert_test_cases.js
     - newman --version
-    - if [ -e $COLLECTION_SCENARIOS ]; then node convert_test_cases $COLLECTION_SCENARIOS converted_scenarios.json; fi
-    - if [ -e $COLLECTION_SCENARIOS ]; then newman run $COLLECTION -e $COLLECTION_VARS --folder Current -d converted_scenarios.json --delay-request 100; fi
-    - if [ ! -e $COLLECTION_SCENARIOS ]; then newman run $COLLECTION -e $COLLECTION_VARS --delay-request 100; fi
+    - node convert_test_cases $COLLECTION_SCENARIOS converted_scenarios.json
+    - newman run $COLLECTION -e $COLLECTION_VARS --folder Current -d converted_scenarios.json --delay-request 100
+  only:
+    refs:
+      - branches
+    variables:
+      - $COLLECTION && $COLLECTION_VARS && $COLLECTION_SCENARIOS
+  except:
+    refs:
+      - master
+      
+postman:
+  stage: validation
+  image: 
+    name: postman/newman
+    entrypoint: ["/bin/sh", "-c"]
+  allow_failure: true
+  script:
+    - export CI_ENVIRONMENT_URL=$(cat environment_url.txt)
+    - sed -i 's#%%URL%%#'"$CI_ENVIRONMENT_URL"'#g' $COLLECTION_VARS
+    - newman --version
+    - newman run $COLLECTION -e $COLLECTION_VARS --delay-request 100
   only:
     refs:
       - branches
@@ -56,7 +75,7 @@ postman:
 quality:
   stage: quality gate
   image:
-    name: microsoft/dotnet:2.1-sdk-alpine
+    name: ${DOTNET_DOCKER_IMAGE}
     entrypoint: ["/bin/sh", "-c"]
   allow_failure: true
   script:
@@ -72,9 +91,9 @@ quality:
   only:
     refs:
       - branches
+    variables:
+      - $SONAR_K && $DOTNET_DOCKER_IMAGE
   except:
     refs:
       - master
       - SWAGGERHUB
-    variables:
-      - $SONAR_DISABLED
