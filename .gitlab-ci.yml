@@ -7,7 +7,6 @@ variables:
   PERFORMANCE_DISABLED: "true"
   POSTGRES_ENABLED: "false"
   TEST_DISABLED: "true"
-  #COLLECTION_SCENARIOS: collection_scenarios.json
 
 stages:
   - build
