@@ -29,7 +29,7 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
-postman with scenarios:
+postman_scenarios:
   stage: validation
   image: 
     name: postman/newman
