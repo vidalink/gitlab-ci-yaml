@@ -44,7 +44,7 @@ postman:
     - wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/convert_test_cases.js -O convert_test_cases.js
     - [ ! -e "$COLLECTION_SCENARIOS" ] || node convert_test_cases $COLLECTION_SCENARIOS converted_scenarios.json
     - newman --version
-    - newman run $COLLECTION -e $COLLECTION_VARS --folder Current ('if [ ! -e "$COLLECTION_SCENARIOS" ]; then echo "-d converted_scenarios.json"; fi') --delay-request 100
+    - newman run $COLLECTION -e $COLLECTION_VARS --folder Current $(`if [ -e "$COLLECTION_SCENARIOS" ]; then echo "-d converted_scenarios.json"; fi`) --delay-request 100
   only:
     refs:
       - branches
