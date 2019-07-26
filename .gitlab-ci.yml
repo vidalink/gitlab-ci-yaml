@@ -48,8 +48,7 @@ postman:
     refs:
       - branches
     variables:
-      - $COLLECTION
-      - $COLLECTION_VARS
+      - $COLLECTION && $COLLECTION_VARS
   except:
     refs:
       - master
