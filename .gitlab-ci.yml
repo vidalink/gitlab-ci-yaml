@@ -69,6 +69,8 @@ postman:
   except:
     refs:
       - master
+    variables:
+      - $COLLECTION_SCENARIOS
 
 quality:
   stage: quality gate
