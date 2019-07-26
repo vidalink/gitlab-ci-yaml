@@ -20,7 +20,7 @@ Yaml para pipeline do gitlab com newman (postman) e sonarqube.
 # Variáveis para habilitar sonar
 
 - $SONAR_K -> Nome do projeto no sonar.
-- $DOTNET_DOCER_IMAGE -> imagem docker de imagem dotnet core usada no projeto de teste
+- $DOTNET_DOCKER_IMAGE -> imagem docker de imagem dotnet core usada no projeto de teste
 
 # Variáveis para habilitar postman com massa de cenários (postman)
 
