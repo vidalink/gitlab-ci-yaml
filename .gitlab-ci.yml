@@ -42,7 +42,7 @@ postman:
     - export CI_ENVIRONMENT_URL=$(cat environment_url.txt)
     - sed -i 's#%%URL%%#'"$CI_ENVIRONMENT_URL"'#g' $COLLECTION_VARS
     - wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/convert_test_cases.js -O convert_test_cases.js
-    - [ -f $COLLECTION_SCENARIOS ] || node convert_test_cases $COLLECTION_SCENARIOS converted_scenarios.json
+    - [ ! -f $COLLECTION_SCENARIOS ] || node convert_test_cases $COLLECTION_SCENARIOS converted_scenarios.json
     - newman --version
     - newman run $COLLECTION -e $COLLECTION_VARS --folder Current -d converted_scenarios.json --delay-request 100
   only:
