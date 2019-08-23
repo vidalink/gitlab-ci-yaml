@@ -30,7 +30,7 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
-variables:
+vars:
   stage: setup
   script:
     - echo $CI_COMMIT_REF_NAME
