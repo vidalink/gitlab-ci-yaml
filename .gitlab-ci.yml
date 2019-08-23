@@ -33,13 +33,17 @@ include:
 vars:
   stage: setup
   script:
-    - echo $CI_COMMIT_REF_NAME
+    #- echo $CI_COMMIT_REF_NAME
     #- if [ "$CI_COMMIT_REF_NAME" = "master" ]; then export KUBE_INGRESS_BASE_DOMAIN='svc.cluster.local'; fi
-    - export KUBE_INGRESS_BASE_DOMAIN=svc.cluster.local
-    - echo $KUBE_INGRESS_BASE_DOMAIN
+    - echo "svc.cluster.local" >> ./local-dns.txt
+    #- echo $KUBE_INGRESS_BASE_DOMAIN
   only:
     refs:
       - master
+  artifacts:
+    paths:
+      - local-dns.txt
+    expire_in: 1 day
 
 postman_scenarios:
   stage: validation
