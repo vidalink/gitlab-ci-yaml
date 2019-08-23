@@ -9,11 +9,11 @@ variables:
   TEST_DISABLED: "true"
 
 stages:
+  - variables
   - build
   - quality gate
   - test
   - deploy
-  - variables
   - review
   - dast
   - staging
@@ -30,19 +30,14 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
-review_variables:
+master_variables:
   stage: variables
-  image: 
-    name: node
-    entrypoint: ["/bin/sh", "-c"]
-  allow_failure: false
   script:
-    - unset KUBE_INGRESS_BASE_DOMAIN
+    - export KUBE_INGRESS_BASE_DOMAIN=svc.cluster.local
   only:
     refs:
-      - dev
-    variables:
-      - $KUBE_INGRESS_BASE_DOMAIN
+      - production
+      - staging
 
 postman_scenarios:
   stage: validation
