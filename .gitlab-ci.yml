@@ -10,6 +10,7 @@ variables:
 
 before_script:
   - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then export KUBE_INGRESS_BASE_DOMAIN='svc.cluster.local'; fi
+  - echo $KUBE_INGRESS_BASE_DOMAIN
 
 stages:
   - build
