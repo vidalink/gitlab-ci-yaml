@@ -7,10 +7,6 @@ variables:
   PERFORMANCE_DISABLED: "true"
   POSTGRES_ENABLED: "false"
   TEST_DISABLED: "true"
-script:
-  - echo $CI_COMMIT_REF_NAME
-  - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then export KUBE_INGRESS_BASE_DOMAIN='svc.cluster.local'; fi
-  - echo $KUBE_INGRESS_BASE_DOMAIN
 
 stages:
   - build
@@ -32,6 +28,13 @@ stages:
 
 include:
   - template: Auto-DevOps.gitlab-ci.yml
+
+setup_staging:
+  stage: staging
+  script:
+  - echo $CI_COMMIT_REF_NAME
+  - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then export KUBE_INGRESS_BASE_DOMAIN='svc.cluster.local'; fi
+  - echo $KUBE_INGRESS_BASE_DOMAIN
 
 postman_scenarios:
   stage: validation
