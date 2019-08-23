@@ -7,8 +7,8 @@ variables:
   PERFORMANCE_DISABLED: "true"
   POSTGRES_ENABLED: "false"
   TEST_DISABLED: "true"
-
-before_script:
+script:
+  - echo $CI_COMMIT_REF_NAME
   - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then export KUBE_INGRESS_BASE_DOMAIN='svc.cluster.local'; fi
   - echo $KUBE_INGRESS_BASE_DOMAIN
 
@@ -47,12 +47,12 @@ postman_scenarios:
     - for scen in ${COLLECTION_SCENARIOS}.*.json; do node convert_test_cases "$scen" converted_scenarios.json; newman run $COLLECTION -e $COLLECTION_VARS --folder $(echo $scen | awk -F'.' '{print $2}') -d converted_scenarios.json --delay-request 100; done;
   only:
     refs:
-      - branches
+      - dev
     variables:
       - $COLLECTION && $COLLECTION_VARS && $COLLECTION_SCENARIOS
-  except:
-    refs:
-      - master
+  #except:
+    #refs:
+      #- master
       
 postman:
   stage: validation
@@ -67,14 +67,14 @@ postman:
     - newman run $COLLECTION -e $COLLECTION_VARS --delay-request 100
   only:
     refs:
-      - branches
+      - dev
     variables:
       - $COLLECTION && $COLLECTION_VARS
-  except:
-    refs:
-      - master
-    variables:
-      - $COLLECTION_SCENARIOS
+  #except:
+    #refs:
+      #- master
+    #variables:
+      #- $COLLECTION_SCENARIOS
 
 quality:
   stage: quality gate
