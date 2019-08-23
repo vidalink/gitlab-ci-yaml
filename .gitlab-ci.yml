@@ -9,6 +9,7 @@ variables:
   TEST_DISABLED: "true"
 
 stages:
+  - setup
   - build
   - quality gate
   - test
@@ -29,12 +30,16 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
-setup_staging:
-  stage: staging
+variables:
+  stage: setup
   script:
-  - echo $CI_COMMIT_REF_NAME
-  - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then export KUBE_INGRESS_BASE_DOMAIN='svc.cluster.local'; fi
-  - echo $KUBE_INGRESS_BASE_DOMAIN
+    - echo $CI_COMMIT_REF_NAME
+    #- if [ "$CI_COMMIT_REF_NAME" = "master" ]; then export KUBE_INGRESS_BASE_DOMAIN='svc.cluster.local'; fi
+    - export KUBE_INGRESS_BASE_DOMAIN=svc.cluster.local
+    - echo $KUBE_INGRESS_BASE_DOMAIN
+  only:
+    refs:
+      - master
 
 postman_scenarios:
   stage: validation
