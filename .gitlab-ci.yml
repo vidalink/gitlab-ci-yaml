@@ -13,6 +13,7 @@ stages:
   - quality gate
   - test
   - deploy
+  - variables
   - review
   - dast
   - staging
@@ -28,6 +29,20 @@ stages:
 
 include:
   - template: Auto-DevOps.gitlab-ci.yml
+
+review_variables:
+  stage: variables
+  image: 
+    name: node
+    entrypoint: ["/bin/sh", "-c"]
+  allow_failure: false
+  script:
+    - unset KUBE_INGRESS_BASE_DOMAIN
+  only:
+    refs:
+      - dev
+    variables:
+      - $KUBE_INGRESS_BASE_DOMAIN
 
 postman_scenarios:
   stage: validation
