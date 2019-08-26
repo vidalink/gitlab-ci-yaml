@@ -29,18 +29,6 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
-integration:
-  stage: test
-  script:
-    - docker build . -f $DOCKERFILE_INTEGRATION_TEST
-  only:
-    refs:
-      - dev
-    variables:
-      - $DOCKERFILE_INTEGRATION_TEST
-  artifacts:
-    expire_in: 25 minutes
-
 postman_scenarios:
   stage: validation
   image: 
