@@ -29,20 +29,17 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
-#vars:
-  #stage: setup
-  #script:
-    #- echo $CI_COMMIT_REF_NAME
-    #- if [ "$CI_COMMIT_REF_NAME" = "master" ]; then export KUBE_INGRESS_BASE_DOMAIN='svc.cluster.local'; fi
-    #- echo "svc.cluster.local" >> ./local-dns.txt
-    #- echo $KUBE_INGRESS_BASE_DOMAIN
-  #only:
-    #refs:
-      #- master
-  #artifacts:
-    #paths:
-      #- local-dns.txt
-    #expire_in: 1 day
+integration:
+  stage: test
+  script:
+    - docker build . -f $DOCKERFILE_INTEGRATION_TEST
+  only:
+    refs:
+      - dev
+    variables:
+      - $DOCKERFILE_INTEGRATION_TEST
+  artifacts:
+    expire_in: 25 minutes
 
 postman_scenarios:
   stage: validation
@@ -61,9 +58,8 @@ postman_scenarios:
       - dev
     variables:
       - $COLLECTION && $COLLECTION_VARS && $COLLECTION_SCENARIOS
-  #except:
-    #refs:
-      #- master
+  artifacts:
+    expire_in: 1 hour
       
 postman:
   stage: validation
@@ -81,11 +77,8 @@ postman:
       - dev
     variables:
       - $COLLECTION && $COLLECTION_VARS
-  #except:
-    #refs:
-      #- master
-    #variables:
-      #- $COLLECTION_SCENARIOS
+  artifacts:
+    expire_in: 1 hour
 
 quality:
   stage: quality gate
@@ -112,3 +105,5 @@ quality:
     refs:
       - master
       - SWAGGERHUB
+  artifacts:
+    expire_in: 1 hour
