@@ -38,12 +38,12 @@ build:
     entrypoint: ["/bin/sh", "-c"]
   allow_failure: false
   script:
-    - dotnet build ${PROJECT_TEST_PATH}
+    - dotnet build ${PROJECT_SLN_PATH}
   only:
     refs:
       - branches
     variables:
-      - $DOTNET_DOCKER_IMAGE && $PROJECT_TEST_PATH
+      - $DOTNET_DOCKER_IMAGE && $PROJECT_SLN_PATH
   except:
     refs:
       - master
