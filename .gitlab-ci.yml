@@ -31,13 +31,6 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
-before_script:
-  - if [ $SLUG ]; then
-       export CI_PROJECT_PATH_SLUG='$SLUG' && export SONAR_K='$SLUG'
-    else
-       echo "$$SLUG variable is required (its like project name, lowercase and using dot as space character)" && exit 1
-    fi
-
 postman_scenarios:
   stage: validation
   image: 
