@@ -1,5 +1,3 @@
-#Template to be used by dotnet core applications
-
 image: alpine:latest
 
 variables:
