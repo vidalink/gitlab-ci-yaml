@@ -1,3 +1,9 @@
+# Template to be used by projects that push libraries to nuget repository
+# PROJECT_TEST_PATH => dotnet project test
+# DOTNET_DOCKER_IMAGE => dotnet core docker image
+# DOCKER_IMAGE_NAME => name to docker image
+# NUGET_KEY => key to authorize nuget repository
+# NUGET_SOURCE_URL => nuget api json address
 image: ${DOTNET_DOCKER_IMAGE}
 
 services:
@@ -39,3 +45,6 @@ test:
   stage: test
   script:
     - dotnet test ${PROJECT_TEST_PATH}
+  only:
+    variables:
+      - $PROJECT_TEST_PATH
