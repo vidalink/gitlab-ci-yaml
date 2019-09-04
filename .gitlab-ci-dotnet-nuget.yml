@@ -1,0 +1,41 @@
+image: ${DOTNET_DOCKER_IMAGE}
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - build
+  - test
+  - package
+
+docker-build:
+  image: docker:stable
+  stage: build
+  script:
+    - docker build -t ${DOCKER_IMAGE_NAME} .
+  only:
+    variables:
+      - $DOCKER_IMAGE_NAME
+
+push-package:
+  image: docker:stable
+  stage: package
+  script:
+    - dotnet nuget push /app/**/*.nupkg ${NUGET_KEY} --source ${NUGET_SOURCE_URL}
+  only:
+    refs:
+      - master
+    variables:
+      - $NUGET_KEY && $NUGET_SOURCE_URL
+  except:
+    refs:
+      - branches
+
+test:
+  stage: test
+  script:
+    - dotnet test ${PROJECT_TEST_PATH}
