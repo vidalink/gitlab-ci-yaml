@@ -31,7 +31,7 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
-compile:
+build:
   stage: build
   image:
     name: ${DOTNET_DOCKER_IMAGE}
