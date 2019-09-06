@@ -97,7 +97,7 @@ quality:
   image:
     name: ${DOTNET_SDK_DOCKER_IMAGE}
     entrypoint: ["/bin/sh", "-c"]
-  allow_failure: false
+  allow_failure: true
   script:
     - apk add --no-cache --update openjdk8-jre nss
     - dotnet tool install --global dotnet-sonarscanner
