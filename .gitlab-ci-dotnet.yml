@@ -36,7 +36,7 @@ include:
 build:
   stage: build
   image:
-    name: ${DOTNET_DOCKER_IMAGE}
+    name: ${DOTNET_SDK_DOCKER_IMAGE}
     entrypoint: ["/bin/sh", "-c"]
   allow_failure: false
   script:
@@ -45,7 +45,7 @@ build:
     refs:
       - branches
     variables:
-      - $DOTNET_DOCKER_IMAGE && $PROJECT_SLN_PATH
+      - $DOTNET_SDK_DOCKER_IMAGE && $PROJECT_SLN_PATH
   except:
     refs:
       - master
@@ -95,7 +95,7 @@ postman:
 quality:
   stage: quality gate
   image:
-    name: ${DOTNET_DOCKER_IMAGE}
+    name: ${DOTNET_SDK_DOCKER_IMAGE}
     entrypoint: ["/bin/sh", "-c"]
   allow_failure: false
   script:
@@ -112,7 +112,7 @@ quality:
     refs:
       - branches
     variables:
-      - $SONAR_K && $DOTNET_DOCKER_IMAGE
+      - $SONAR_K && $DOTNET_SDK_DOCKER_IMAGE
   except:
     refs:
       - master
