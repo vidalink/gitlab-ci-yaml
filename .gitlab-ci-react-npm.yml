@@ -42,7 +42,7 @@ push-package:
 test:
   stage: test
   script:
-    - npm run test ${PROJECT_PATH_TEST}
+    - npm test --prefix ${PROJECT_PATH_TEST}
   only:
     variables:
       - $PROJECT_PATH_TEST
