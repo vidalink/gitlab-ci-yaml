@@ -28,7 +28,6 @@ docker-build:
       - $DOCKER_IMAGE_NAME
 
 push-package:
-  image: docker:stable
   stage: package
   script:
     - npm config set registry ${NPM_SOURCE_URL}
