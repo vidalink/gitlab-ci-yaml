@@ -31,7 +31,7 @@ push-package:
   stage: package
   script:
     - npm config set registry ${NPM_SOURCE_URL}
-    - npm publish
+    - npm publish --prefix ${PROJECT_PATH}
   only:
     refs:
       - master
