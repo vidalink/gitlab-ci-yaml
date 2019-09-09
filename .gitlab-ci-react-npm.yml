@@ -1,0 +1,50 @@
+# Template to be used by projects that push libraries to nuget repository
+# PROJECT_TEST_PATH => node project test
+# NODE_DOCKER_IMAGE => node core docker image
+# DOCKER_IMAGE_NAME => name to docker image
+# NPM_SOURCE_URL => npm api json address
+image: ${NODE_DOCKER_IMAGE}
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - build
+  - test
+  - package
+
+docker-build:
+  image: docker:stable
+  stage: build
+  script:
+    - docker build -t ${DOCKER_IMAGE_NAME} .
+  only:
+    variables:
+      - $DOCKER_IMAGE_NAME
+
+push-package:
+  image: docker:stable
+  stage: package
+  script:
+    - npm config set registry ${NPM_SOURCE_URL}
+    - npm publish
+  only:
+    refs:
+      - master
+    variables:
+      - $NPM_SOURCE_URL
+  except:
+    refs:
+      - branches
+
+test:
+  stage: test
+  script:
+    - npm run test ${PROJECT_TEST_PATH}
+  only:
+    variables:
+      - $PROJECT_TEST_PATH
