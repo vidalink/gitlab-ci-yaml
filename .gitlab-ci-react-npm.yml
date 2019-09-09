@@ -29,8 +29,9 @@ docker-build:
 
 push-package:
   stage: package
-  script:    
-    - npm install ${PROJECT_PATH}
+  script:
+    - echo ${PROJECT_PATH}
+    - npm install --prefix ${PROJECT_PATH}
     - npm run build --prefix ${PROJECT_PATH}
     - npm config set registry ${NPM_SOURCE_URL}
     - npm publish --prefix ${PROJECT_PATH}
