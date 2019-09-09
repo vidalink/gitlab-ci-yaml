@@ -38,9 +38,6 @@ push-package:
       - master
     variables:
       - $NPM_SOURCE_URL
-  except:
-    refs:
-      - branches
 
 test:
   stage: test
