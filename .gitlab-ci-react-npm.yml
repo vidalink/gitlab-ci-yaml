@@ -1,8 +1,8 @@
 # Template to be used by projects that push libraries to nuget repository
-# PROJECT_TEST_PATH => node project test
-# NODE_DOCKER_IMAGE => node core docker image
-# DOCKER_IMAGE_NAME => name to docker image
-# NPM_SOURCE_URL => npm api json address
+# PROJECT_PATH => node project path
+# NODE_DOCKER_IMAGE => node docker image
+# DOCKER_IMAGE_NAME => docker image name to registry
+# NPM_SOURCE_URL => npm auth url
 image: ${NODE_DOCKER_IMAGE}
 
 services:
@@ -21,7 +21,7 @@ docker-build:
   image: docker:stable
   stage: build
   script:
-    - docker build -t ${DOCKER_IMAGE_NAME} .
+    - docker build -t ${DOCKER_IMAGE_NAME} ./${PROJECT_PATH}
   only:
     variables:
       - $DOCKER_IMAGE_NAME
@@ -44,7 +44,7 @@ push-package:
 test:
   stage: test
   script:
-    - npm run test ${PROJECT_TEST_PATH}
+    - npm run test ${PROJECT_PATH}
   only:
     variables:
-      - $PROJECT_TEST_PATH
+      - $PROJECT_PATH
