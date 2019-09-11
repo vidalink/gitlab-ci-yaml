@@ -48,8 +48,8 @@ build:
   only:
     refs:
       - branchs
-    variables:
-      - $DOTNET_SDK_DOCKER_IMAGE && $PROJECT_SLN_PATH
+    #variables:
+      #- $DOTNET_SDK_DOCKER_IMAGE && $PROJECT_SLN_PATH
   artifacts:
     expire_in: 1 hour
 
