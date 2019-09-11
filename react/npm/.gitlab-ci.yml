@@ -7,7 +7,10 @@ stages:
 
 docker-build:
   stage: build
-  image: docker:alpine
+  image: docker:stable
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
   script:
     - docker build -t $CI_PROJECT_NAMESPACE $SOLUTION_PATH
   only:
