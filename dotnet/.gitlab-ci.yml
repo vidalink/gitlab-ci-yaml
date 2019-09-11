@@ -11,8 +11,6 @@ variables:
 # Default values
 before_script:
   - if [ ! $DOTNET_SDK_DOCKER_IMAGE ]; then export DOTNET_SDK_DOCKER_IMAGE='microsoft/dotnet:2.2-sdk-alpine'; fi
-  - export SONAR_K='${SLUG}'
-  - export CI_PROJECT_PATH_SLUG='${SLUG}'
 
 stages:
   - build
