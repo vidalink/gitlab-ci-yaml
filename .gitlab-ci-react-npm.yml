@@ -42,7 +42,7 @@ test:
   stage: test
   script:
     - npm install ${PROJECT_PATH_TEST}
-    - npm test ${PROJECT_PATH_TEST}
+    - npm test --prefix ${PROJECT_PATH_TEST}
   only:
     variables:
       - $PROJECT_PATH_TEST
