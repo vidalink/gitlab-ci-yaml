@@ -29,11 +29,9 @@ docker-build:
 
 push-package:
   stage: package
-  script:    
-    - npm install ${PROJECT_PATH} -g    
-    - npm run build --prefix ${PROJECT_PATH}
-    - npm config set registry ${NPM_SOURCE_URL}
-    - npm publish --prefix ${PROJECT_PATH}
+  script:
+    - npm install ${PROJECT_PATH} -g
+    - npm publish ${PROJECT_PATH} --registry=${NPM_SOURCE_URL}
   only:
     refs:
       - master
@@ -43,8 +41,8 @@ push-package:
 test:
   stage: test
   script:
-    - npm install --prefix ${PROJECT_PATH_TEST}
-    - npm test --prefix ${PROJECT_PATH_TEST}
+    - npm install ${PROJECT_PATH_TEST}
+    - npm test ${PROJECT_PATH_TEST}
   only:
     variables:
       - $PROJECT_PATH_TEST
