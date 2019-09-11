@@ -51,7 +51,7 @@ build:
     refs:
       - branches
     variables:
-      - $DOTNET_SDK_DOCKER_IMAGE && $PROJECT_SLN_PATH
+      - $DOTNET_SDK_DOCKER_IMAGE
   except:
     refs:
       - master
