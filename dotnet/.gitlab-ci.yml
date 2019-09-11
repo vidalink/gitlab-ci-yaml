@@ -94,7 +94,7 @@ quality:
     refs:
       - branches
     variables:
-      - $SONAR_K && $DOTNET_SDK_DOCKER_IMAGE
+      - $SONAR_K
   except:
     refs:
       - master
