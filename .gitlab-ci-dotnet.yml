@@ -1,5 +1,7 @@
-#WIP
-#Template to be used by dotnet core applications
+# WIP
+# Template to be used by dotnet core applications
+# Defaults:
+# - dotnet 2.2
 
 image: alpine:latest
 
@@ -13,7 +15,6 @@ variables:
 
 # Default values
 before_script:
-  - if [ ! $PROJECT_SLN_PATH ]; then export PROJECT_SLN_PATH='src'; fi
   - if [ ! $DOTNET_SDK_DOCKER_IMAGE ]; then export DOTNET_SDK_DOCKER_IMAGE='microsoft/dotnet:2.2-sdk-alpine'; fi
 
 stages:
@@ -45,13 +46,6 @@ build:
   allow_failure: false
   script:
     - dotnet build ${PROJECT_SLN_PATH}
-  #only:
-    #refs:
-      #- branchs
-    #variables:
-      #- $DOTNET_SDK_DOCKER_IMAGE && $PROJECT_SLN_PATH
-  #artifacts:
-    #expire_in: 1 hour
 
 postman_scenarios:
   stage: validation
