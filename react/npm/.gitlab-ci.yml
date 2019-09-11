@@ -1,8 +1,5 @@
 image: node:carbon
 
-services:
-  - docker:dind
-
 stages:
   - build
   - test
@@ -10,6 +7,7 @@ stages:
 
 docker-build:
   stage: build
+  image: docker:alpine
   script:
     - docker build -t $CI_PROJECT_NAMESPACE $SOLUTION_PATH
   only:
