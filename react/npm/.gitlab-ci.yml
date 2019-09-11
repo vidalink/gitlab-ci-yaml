@@ -19,10 +19,10 @@ docker-build:
   image: docker:stable
   stage: build
   script:
-    - docker build -t $CI_PROJECT_NAMESPACE $SOLUTION_PATH
+    - docker build -t $CI_PROJECT_NAME $SOLUTION_PATH
   only:
     variables:
-      - $CI_PROJECT_NAMESPACE && $SOLUTION_PATH
+      - $CI_PROJECT_NAME && $SOLUTION_PATH
 
 push-package:
   stage: package
