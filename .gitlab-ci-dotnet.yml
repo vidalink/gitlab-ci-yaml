@@ -46,11 +46,10 @@ build:
   script:
     - dotnet build ${PROJECT_SLN_PATH}
   only:
-    variables:
-      - $DOTNET_SDK_DOCKER_IMAGE
-  except:
     refs:
-      - SWAGGERHUB
+      - branchs
+    variables:
+      - $DOTNET_SDK_DOCKER_IMAGE && $PROJECT_SLN_PATH
   artifacts:
     expire_in: 1 hour
 
