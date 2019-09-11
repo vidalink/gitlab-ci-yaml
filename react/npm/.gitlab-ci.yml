@@ -11,7 +11,7 @@ stages:
 docker-build:
   stage: build
   script:
-    - docker build -t ${CI_PROJECT_NAMESPACE} ${SOLUTION_PATH}
+    - docker build -t $CI_PROJECT_NAMESPACE $SOLUTION_PATH
   only:
     variables:
       - $CI_PROJECT_NAMESPACE && $SOLUTION_PATH
@@ -19,19 +19,19 @@ docker-build:
 push-package:
   stage: package
   script:
-    - npm install --prefix ${SOLUTION_PATH} -g
-    - npm publish ${SOLUTION_PATH} --registry=${NPM_SOURCE_URL}
+    - npm install --prefix $SOLUTION_PATH -g
+    - npm publish $SOLUTION_PATH --registry=$NPM_SOURCE_URL
   only:
     refs:
       - master
     variables:
-      - $NPM_SOURCE_URL && SOLUTION_PATH
+      - $NPM_SOURCE_URL && $SOLUTION_PATH
 
 test:
   stage: test
   script:
-    - npm install --prefix ${PROJECT_PATH_TEST}
-    - npm test --prefix ${PROJECT_PATH_TEST}
+    - npm install --prefix $PROJECT_PATH_TEST
+    - npm test --prefix $PROJECT_PATH_TEST
   only:
     variables:
       - $PROJECT_PATH_TEST
