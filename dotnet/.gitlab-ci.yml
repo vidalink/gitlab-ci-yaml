@@ -38,15 +38,6 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
 
-build:
-  stage: build
-  image:
-    name: ${DOTNET_SDK_DOCKER_IMAGE}
-    entrypoint: ["/bin/sh", "-c"]
-  allow_failure: false
-  script:
-    - dotnet build ${PROJECT_SLN_PATH}
-
 postman_scenarios:
   stage: validation
   image: 
