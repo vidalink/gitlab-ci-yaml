@@ -1,10 +1,4 @@
-# Template to be used by projects that push libraries to nuget repository
-# PROJECT_PATH => node project path
-# PROJECT_PATH_TEST => node project path test
-# NODE_DOCKER_IMAGE => node docker image
-# DOCKER_IMAGE_NAME => docker image name to registry
-# NPM_SOURCE_URL => npm auth url
-image: ${NODE_DOCKER_IMAGE}
+image: node:carbon
 
 services:
   - docker:dind
