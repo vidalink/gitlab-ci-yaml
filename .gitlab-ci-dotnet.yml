@@ -10,8 +10,6 @@ variables:
   PERFORMANCE_DISABLED: "true"
   POSTGRES_ENABLED: "false"
   TEST_DISABLED: "true"
-  CI_PROJECT_PATH_SLUG: "$SLUG"
-  SONAR_K: "$SLUG"
 
 # Default values
 before_script:
