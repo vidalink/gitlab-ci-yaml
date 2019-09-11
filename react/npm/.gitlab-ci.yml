@@ -5,12 +5,16 @@ stages:
   - test
   - package
 
+ services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: 'tcp://docker:2375'
+  DOCKER_DRIVER: 'overlay2'
+
 docker-build:
-  stage: build
   image: docker:stable
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
+  stage: build
   script:
     - docker build -t $CI_PROJECT_NAMESPACE $SOLUTION_PATH
   only:
