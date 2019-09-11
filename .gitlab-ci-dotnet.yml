@@ -45,13 +45,13 @@ build:
   allow_failure: false
   script:
     - dotnet build ${PROJECT_SLN_PATH}
-  only:
-    refs:
-      - branchs
+  #only:
+    #refs:
+      #- branchs
     #variables:
       #- $DOTNET_SDK_DOCKER_IMAGE && $PROJECT_SLN_PATH
-  artifacts:
-    expire_in: 1 hour
+  #artifacts:
+    #expire_in: 1 hour
 
 postman_scenarios:
   stage: validation
