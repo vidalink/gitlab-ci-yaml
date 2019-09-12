@@ -32,6 +32,8 @@ publish:
     - gcloud auth activate-service-account --key-file ${TMP_FILE}
     - export CLOUDSDK_CORE_PROJECT='${PROJECT_ID}'
     - export TAG='gcr.io/${PROJECT_ID}/${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}'
+    - echo $TAG
+    - gcloud config set project ${PROJECT_ID}
     - gcloud builds submit --tag ${TAG}
     - gcloud beta run deploy ${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION}
   only:
