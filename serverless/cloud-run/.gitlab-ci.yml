@@ -1,10 +1,7 @@
 image: alpine:latest
 
-variables:
-  AUTH: '--alow-unauthenticated'
-
 before_script:
-  - if ["$PRIVATE" = "false"]; then AUTH='' fi
+  - if [ "$PRIVATE" = "false" ]; then export AUTH=''; else export AUTH='--alow-unauthenticated'; fi
 
 stages:
   - build
