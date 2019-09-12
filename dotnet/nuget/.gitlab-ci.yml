@@ -23,7 +23,7 @@ docker-build:
   image: docker:stable
   stage: build
   script:
-    - docker build -t ${DOCKER_IMAGE_NAME} .
+    - docker build -t ${CI_PROJECT_PATH_SLUG} .
   only:
     variables:
       - $DOCKER_IMAGE_NAME
