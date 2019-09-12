@@ -61,6 +61,3 @@ production:
       - master
     variables:
       - $GCLOUD_PROJECT_REGION
-
-after_script:
-- rm ${TMP_FILE}
