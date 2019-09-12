@@ -4,3 +4,4 @@
 - CLOUDSDK_CORE_PROJECT = google cloud unique project id
 - GCLOUD_PROJECT_REGION = google cloud region where you would like to run your application
 - BUILD_DOCKER_IMAGE = Dockerfile used to build and run your application
+- PRIVATE = indicates whether this application should run in GCP network internal or external
