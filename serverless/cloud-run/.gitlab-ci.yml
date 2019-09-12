@@ -17,7 +17,7 @@ compile:
     - docker build -t ${CI_PROJECT_PATH_SLUG} ${PROJECT_PATH}
   only:
     refs:
-      - master
+      - teste
     variables:
       - $BUILD_DOCKER_IMAGE && $PROJECT_PATH
 
@@ -29,6 +29,11 @@ publish:
     - export TAG='gcr.io/${GCLOUD_PROJECT_ID}/${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}'
     - gcloud builds submit --tag ${TAG}
     - gcloud beta run deploy ${GCLOUD_PROJECT_ID} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION}
+  only:
+    refs:
+      - teste
+    variables:
+      - $GCLOUD_PROJECT_ID && $PROJECT_PATH
 
 after_script:
 - rm ${TMP_FILE}
