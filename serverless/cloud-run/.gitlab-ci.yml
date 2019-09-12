@@ -12,7 +12,7 @@ compile:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
   script:
-    - docker build -t ${CI_PROJECT_PATH_SLUG} ${PROJECT_PATH}
+    - docker build -t ${CI_PROJECT_PATH_SLUG} .
   only:
     refs:
       - teste
@@ -34,7 +34,7 @@ publish:
     refs:
       - teste
     variables:
-      - $GCLOUD_PROJECT_ID && $PROJECT_PATH
+      - $GCLOUD_PROJECT_ID && GCLOUD_PROJECT_REGION
 
 after_script:
 - rm ${TMP_FILE}
