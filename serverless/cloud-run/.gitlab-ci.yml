@@ -27,15 +27,10 @@ publish:
   environment: production
   script:
     - printenv
-    - export TMP_FILE='/tmp/${CI_PIPELINE_ID}.json'
+    - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
+    - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
     - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
     - gcloud auth activate-service-account --key-file ${TMP_FILE}
-    - export CLOUDSDK_CORE_PROJECT=${PROJECT_ID}
-    - export TAG=gcr.io/${PROJECT_ID}/${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
-    - export TAG2='gcr.io/$PROJECT_ID/$CI_PROJECT_PATH_SLUG:$CI_PIPELINE_ID'
-    - echo $TAG
-    - echo $TAG2
-    - gcloud config set project ${PROJECT_ID}
     - gcloud builds submit --tag ${TAG}
     - gcloud beta run deploy ${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION}
   only:
