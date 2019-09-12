@@ -1,5 +1,11 @@
 image: alpine:latest
 
+variables:
+  AUTH: '--alow-unauthenticated'
+
+before_script:
+  - if ["$PRIVATE" = "false"]; then export AUTH='' fi
+
 stages:
   - build
   - test
@@ -34,7 +40,7 @@ test:
     - gcloud auth activate-service-account --key-file ${TMP_FILE}
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
     - gcloud builds submit --tag ${TAG}
-    - gcloud beta run deploy test-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION}
+    - gcloud beta run deploy test-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH}
   only:
     variables:
       - $GCLOUD_PROJECT_REGION
@@ -51,7 +57,7 @@ production:
     - gcloud auth activate-service-account --key-file ${TMP_FILE}
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
     - gcloud builds submit --tag ${TAG}
-    - gcloud beta run deploy ${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION}
+    - gcloud beta run deploy ${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH}
   only:
     refs:
       - master
