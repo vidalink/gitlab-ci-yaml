@@ -19,7 +19,7 @@ compile:
     refs:
       - teste
     variables:
-      - $BUILD_DOCKER_IMAGE && $PROJECT_PATH
+      - $BUILD_DOCKER_IMAGE
 
 publish:
   stage: deploy
