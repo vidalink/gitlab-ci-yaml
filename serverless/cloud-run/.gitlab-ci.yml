@@ -2,9 +2,10 @@ image: alpine:latest
 
 stages:
   - build
-  - deploy
+  - test
+  - production
 
-compile:
+build:
   stage: build
   environment: production
   image: docker:stable
@@ -21,8 +22,8 @@ compile:
     variables:
       - $BUILD_DOCKER_IMAGE
 
-review:
-  stage: deploy
+test:
+  stage: test
   image: google/cloud-sdk:latest
   environment: test
   script:
@@ -43,8 +44,8 @@ review:
     refs:
       - master
 
-publish:
-  stage: deploy
+production:
+  stage: production
   image: google/cloud-sdk:latest
   environment: production
   script:
