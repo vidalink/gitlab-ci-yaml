@@ -38,9 +38,6 @@ test:
   only:
     variables:
       - $GCLOUD_PROJECT_REGION
-  except:
-    refs:
-      - master
 
 production:
   stage: production
