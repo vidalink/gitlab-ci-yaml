@@ -1,7 +1,7 @@
 image: alpine:latest
 
 before_script:
-  - if [ $PUBLIC ]; then export AUTH='--alow-unauthenticated'; else export AUTH=''; fi
+  - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
   - echo "$AUTH"
 
 stages:
