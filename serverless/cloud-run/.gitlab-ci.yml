@@ -36,7 +36,7 @@ publish:
     refs:
       - teste
     variables:
-      - $GCLOUD_PROJECT_ID && GCLOUD_PROJECT_REGION
+      - $GCLOUD_PROJECT_ID && $GCLOUD_PROJECT_REGION
 
 after_script:
 - rm ${TMP_FILE}
