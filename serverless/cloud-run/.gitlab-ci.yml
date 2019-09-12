@@ -17,9 +17,9 @@ compile:
     - docker build -t ${CI_PROJECT_PATH_SLUG} .
   only:
     refs:
-      - teste
+      - master
     variables:
-      - $BUILD_DOCKER_IMAGE && $D
+      - $BUILD_DOCKER_IMAGE
 
 publish:
   stage: deploy
@@ -36,7 +36,7 @@ publish:
     - gcloud beta run deploy ${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION}
   only:
     refs:
-      - teste
+      - master
     variables:
       - $GCLOUD_PROJECT_REGION
 
