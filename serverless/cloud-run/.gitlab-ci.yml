@@ -21,6 +21,28 @@ compile:
     variables:
       - $BUILD_DOCKER_IMAGE
 
+review:
+  stage: deploy
+  image: google/cloud-sdk:latest
+  environment: test
+  script:
+    - printenv
+    - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
+    - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/test-${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
+    - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
+    - gcloud auth activate-service-account --key-file ${TMP_FILE}
+    - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
+    - gcloud builds submit --tag ${TAG}
+    - gcloud beta run deploy test-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION}
+  only:
+    refs:
+      - branchs
+    variables:
+      - $GCLOUD_PROJECT_REGION
+  except:
+    refs:
+      - master
+
 publish:
   stage: deploy
   image: google/cloud-sdk:latest
