@@ -4,7 +4,7 @@ variables:
   AUTH: '--alow-unauthenticated'
 
 before_script:
-  - if ["$PRIVATE" = "false"]; then export AUTH='' fi
+  - if ["$PRIVATE" = "false"]; then AUTH='' fi
 
 stages:
   - build
