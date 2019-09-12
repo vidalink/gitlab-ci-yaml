@@ -1,1 +1,34 @@
-# WIP
+image: google/cloud-sdk:latest
+
+before_script:
+- export TMP_FILE='/tmp/${CI_PIPELINE_ID}.json'
+- echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
+- gcloud auth activate-service-account --key-file ${TMP_FILE}
+
+stages:
+  - build
+  - deploy
+
+compile:
+  stage: build
+  environment: production
+  image: ${BUILD_DOCKER_IMAGE}
+  script:
+    - docker build -t ${CI_PROJECT_PATH_SLUG} ${PROJECT_PATH}
+  only:
+    refs:
+      - master
+    variables:
+      - $BUILD_DOCKER_IMAGE && $PROJECT_PATH
+
+publish:
+  stage: deploy
+  environment: production
+  script:
+    - gcloud auth ...
+    - export TAG='gcr.io/${GCLOUD_PROJECT_ID}/${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}'
+    - gcloud builds submit --tag ${TAG}
+    - gcloud beta run deploy ${GCLOUD_PROJECT_ID} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION}
+
+after_script:
+- rm ${TMP_FILE}
