@@ -2,7 +2,7 @@ image: alpine:latest
 
 before_script:
   - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
-  - if [ ! $TIMEOUT ]; then export TIMEOUT='2m'; fi
+  - if [ ! $TIMEOUT ]; then export TIMEOUT='--timeout 2m'; fi
   - echo "$AUTH"
 
 stages:
