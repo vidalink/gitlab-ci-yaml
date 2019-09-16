@@ -10,6 +10,7 @@ Algumas variaveis definem um comportamento padrão dessa etapa. São elas:
 
 # Etapas da master
 - Package
+- Test
 
 # Etapas da review/dev
 - Test
