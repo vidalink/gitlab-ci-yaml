@@ -7,7 +7,7 @@ before_script:
 
 stages:
   - build
-  - test
+  - review
   - production
 
 build:
@@ -25,8 +25,8 @@ build:
     variables:
       - $BUILD_DOCKER_IMAGE
 
-test:
-  stage: test
+publish:
+  stage: review
   image: google/cloud-sdk:latest
   environment: test
   script:
@@ -46,7 +46,7 @@ test:
     variables:
       - $GCLOUD_PROJECT_REGION
 
-production:
+publish:
   stage: production
   image: google/cloud-sdk:latest
   environment: production
