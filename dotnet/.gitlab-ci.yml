@@ -8,7 +8,6 @@ variables:
   POSTGRES_ENABLED: "false"
   TEST_DISABLED: "true"
 
-# Default values
 before_script:
   - printenv
   - if [ ! $DOTNET_SDK_DOCKER_IMAGE ]; then export DOTNET_SDK_DOCKER_IMAGE='microsoft/dotnet:2.2-sdk-alpine'; fi
@@ -34,42 +33,4 @@ stages:
 include:
   - template: Auto-DevOps.gitlab-ci.yml
   - remote: 'https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/templates/dotnet/sonar/.gitlab-ci-template.yml'
-
-postman_scenarios:
-  stage: validation
-  image: 
-    name: postman/newman
-    entrypoint: ["/bin/sh", "-c"]
-  allow_failure: true
-  script:
-    - export CI_ENVIRONMENT_URL=$(cat environment_url.txt)
-    - sed -i 's#%%URL%%#'"$CI_ENVIRONMENT_URL"'#g' $COLLECTION_VARS
-    - wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/convert_test_cases.js -O convert_test_cases.js
-    - newman --version
-    - for scen in ${COLLECTION_SCENARIOS}.*.json; do node convert_test_cases "$scen" converted_scenarios.json; newman run $COLLECTION -e $COLLECTION_VARS --folder $(echo $scen | awk -F'.' '{print $2}') -d converted_scenarios.json --delay-request 100; done;
-  only:
-    refs:
-      - dev
-    variables:
-      - $COLLECTION && $COLLECTION_VARS && $COLLECTION_SCENARIOS
-  artifacts:
-    expire_in: 1 hour
-      
-postman:
-  stage: validation
-  image: 
-    name: postman/newman
-    entrypoint: ["/bin/sh", "-c"]
-  allow_failure: true
-  script:
-    - export CI_ENVIRONMENT_URL=$(cat environment_url.txt)
-    - sed -i 's#%%URL%%#'"$CI_ENVIRONMENT_URL"'#g' $COLLECTION_VARS
-    - newman --version
-    - newman run $COLLECTION -e $COLLECTION_VARS --delay-request 100
-  only:
-    refs:
-      - dev
-    variables:
-      - $COLLECTION && $COLLECTION_VARS
-  artifacts:
-    expire_in: 1 hour
+  - remote: 'https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/templates/postman/.gitlab-ci-template.yml'
