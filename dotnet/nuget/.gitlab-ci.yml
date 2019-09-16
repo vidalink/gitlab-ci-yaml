@@ -1,12 +1,8 @@
-#WIP
-# Template to be used by projects that push libraries to nuget repository
-# PROJECT_TEST_PATH => dotnet project test
-# DOTNET_DOCKER_IMAGE => dotnet core docker image
-# DOCKER_IMAGE_NAME => name to docker image
-# NUGET_KEY => key to authorize nuget repository
-# NUGET_SOURCE_URL => nuget api json address
-image: ${DOTNET_DOCKER_IMAGE}
-
+#obrigatório
+#NUGET_KEY: 634138b1-d6aa-4db6-b388-b583b5c2f855
+#NUGET_SOURCE_URL: https://www.myget.org/F/vidalink/auth/634138b1-d6aa-4db6-b388-b583b5c2f855/api/v3/index.json
+#opcional
+#DOTNET_SDK_DOCKER_IMAGE
 services:
   - docker:dind
 
@@ -14,38 +10,21 @@ variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
 
+before_script:
+  - printenv
+  - if [ ! $DOTNET_SDK_DOCKER_IMAGE ]; then export DOTNET_SDK_DOCKER_IMAGE='microsoft/dotnet:2.2-sdk-alpine'; fi
+
 stages:
-  - build
-  - test
+  - quality gate
   - package
 
-docker-build:
-  image: docker:stable
-  stage: build
-  script:
-    - docker build -t ${CI_PROJECT_PATH_SLUG} .
-  only:
-    variables:
-      - $DOCKER_IMAGE_NAME
-
-push-package:
-  image: docker:stable
+push:
   stage: package
+  image: ${DOTNET_SDK_DOCKER_IMAGE}
   script:
-    - dotnet nuget push /app/**/*.nupkg ${NUGET_KEY} --source ${NUGET_SOURCE_URL}
+    - dotnet build -c Release -p:maxcpucount=5
+    - dotnet pack -c Release --no-build
+    - dotnet nuget push ./**/*.nupkg ${NUGET_KEY} --source ${NUGET_SOURCE_URL}
   only:
     refs:
       - master
-    variables:
-      - $NUGET_KEY && $NUGET_SOURCE_URL
-  except:
-    refs:
-      - branches
-
-test:
-  stage: test
-  script:
-    - dotnet test ${PROJECT_TEST_PATH}
-  only:
-    variables:
-      - $PROJECT_TEST_PATH
