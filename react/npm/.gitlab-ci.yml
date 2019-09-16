@@ -1,7 +1,6 @@
 image: node:carbon
 
 stages:
-  - build
   - test
   - package
 
@@ -15,16 +14,7 @@ variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
 
-docker-build:
-  image: docker:stable
-  stage: build
-  script:
-    - docker build -t $CI_PROJECT_NAME $SOLUTION_PATH
-  only:
-    variables:
-      - $CI_PROJECT_NAME && $SOLUTION_PATH
-
-push-package:
+push-to-npm:
   stage: package
   script:
     - npm install --prefix $SOLUTION_PATH -g
@@ -42,4 +32,4 @@ test:
     - npm test --prefix $PROJECT_PATH_TEST
   only:
     variables:
-      - $PROJECT_PATH_TEST
+      - $PROJECT_PATH_TEST && $SOLUTION_PATH
