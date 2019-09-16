@@ -1,8 +1,3 @@
-#obrigatório
-#NUGET_KEY: 634138b1-d6aa-4db6-b388-b583b5c2f855
-#NUGET_SOURCE_URL: https://www.myget.org/F/vidalink/auth/634138b1-d6aa-4db6-b388-b583b5c2f855/api/v3/index.json
-#opcional
-#DOTNET_SDK_DOCKER_IMAGE
 services:
   - docker:dind
 
