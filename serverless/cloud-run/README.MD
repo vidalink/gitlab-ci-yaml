@@ -23,4 +23,4 @@ Algumas variaveis definem um comportamento necessários para que esse pipeline o
 
 # Etapas de review/dev
 - Build
-- Test
+- Review
