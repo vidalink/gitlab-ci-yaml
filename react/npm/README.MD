@@ -8,9 +8,9 @@ Algumas variaveis definem um comportamento padrão dessa etapa. São elas:
 - PROJECT_PATH_TEST: **'my-react-component/tests'**
 - NPM_SOURCE_URL: **'https://www.npm-xpto-repo.org/abc/auth/sf98dfu9s-ds9i9-f0s0-fds7f-dffsdfs/npm/'**
 
-# Etapas da master
+## Etapas da master
 - Package
 - Test
 
-# Etapas da review/dev
+## Etapas da review/dev
 - Test
