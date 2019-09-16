@@ -13,6 +13,9 @@ stages:
   - quality gate
   - package
 
+include:
+  - remote: 'https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/templates/dotnet/sonar/.gitlab-ci-template.yml'
+
 push:
   stage: package
   image: ${DOTNET_SDK_DOCKER_IMAGE}
