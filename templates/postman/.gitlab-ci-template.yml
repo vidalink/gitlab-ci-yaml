@@ -1,6 +1,5 @@
 before_script:
   - if [ ! $COLLECTION_VARS ]; then export COLLECTION_VARS='collection_vars.json'; fi
-  - if [ ! $COLLECTION ]; then export COLLECTION='collection.json'; fi
 
 stages:
   - validation
