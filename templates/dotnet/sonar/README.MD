@@ -20,9 +20,14 @@ As variáveis a seguir são necessárias para que essa etapa funcione no seu pip
 ### Configurar no projeto
 Para implementar esse template, use:
 > stages:
+>
 >   \- ...
+>
 >   \- quality gate
-> 
+>
+>
 > include:
+>
 >   \- ...
+>
 >   \- remote: 'https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/templates/dotnet/sonar/.gitlab-ci-template.yml'
