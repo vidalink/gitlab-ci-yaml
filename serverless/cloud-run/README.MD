@@ -1,4 +1,4 @@
-# Template gitlab-ci para projetos google cloud run
+# [WIP] Template gitlab-ci para projetos google cloud run
 Esse template oferece a possibilidade de compilar sua aplicação, validar e disponibilizar diretamente no google cloud run fazendo uso apenas de um Dockerfile.
 Lembre-se que para o cloud run, a porta do seu dockerfile deve ser **8080**.
 
