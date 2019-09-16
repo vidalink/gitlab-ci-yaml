@@ -6,4 +6,4 @@ Os templates abaixo automatizam o processo de CI/CD
 - react npm: https://github.com/vidalink/gitlab-ci-yaml/tree/master/react/npm
 - gcloud serverless: https://github.com/vidalink/gitlab-ci-yaml/tree/master/serverless/cloud-run
 
-## Atenção, os templates que estiverem marcados com WIP, estão em testes e podem não funcionar ou não existir
+> **Atenção, os templates que estiverem marcados com WIP, estão em testes e podem não funcionar ou não existir**
