@@ -3,6 +3,7 @@ image: alpine:latest
 before_script:
   - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
   - if [ ! $TIMEOUT ]; then export TIMEOUT='2m'; fi
+  - if [ ! $PROJECT_PATH ]; then export PROJECT_PATH='.'; fi
   - echo "$AUTH"
 
 stages:
@@ -20,7 +21,7 @@ build:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
   script:
-    - docker build -t ${CI_PROJECT_PATH_SLUG} .
+    - docker build -t ${CI_PROJECT_PATH_SLUG} ${PROJECT_PATH}
 
 publish:
   stage: review
