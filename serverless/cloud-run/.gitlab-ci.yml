@@ -36,7 +36,7 @@ test:
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
     - gcloud builds submit --tag ${TAG} ${PROJECT_PATH}
     - gcloud beta run deploy test-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT}
-    - gcloud beta run services add-iam-policy-binding test-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}
+    - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding test-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
   only:
     refs:
       - branches
@@ -59,7 +59,7 @@ production:
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
     - gcloud builds submit --tag ${TAG} ${PROJECT_PATH}
     - gcloud beta run deploy ${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT}
-    - gcloud beta run services add-iam-policy-binding ${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}
+    - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
   only:
     refs:
       - master
