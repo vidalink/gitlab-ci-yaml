@@ -38,12 +38,9 @@ publish:
     - gcloud beta run services add-iam-policy-binding test-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}
   only:
     refs:
-      - branches
+      - review/*
     variables:
       - $GCLOUD_PROJECT_REGION
-  except:
-    refs:
-      - master
 
 publish:
   stage: production
