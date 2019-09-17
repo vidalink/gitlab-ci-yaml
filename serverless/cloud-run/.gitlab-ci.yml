@@ -7,7 +7,7 @@ before_script:
 
 stages:
   - build
-  - review
+  - test
   - production
 
 build:
@@ -22,10 +22,10 @@ build:
   script:
     - docker build -t ${CI_PROJECT_PATH_SLUG} ${PROJECT_PATH}
 
-review:
-  stage: review
+test:
+  stage: test
   image: google/cloud-sdk:latest
-  environment: review
+  environment: test
   script:
     - printenv
     - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
