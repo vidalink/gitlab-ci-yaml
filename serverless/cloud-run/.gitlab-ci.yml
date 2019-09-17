@@ -21,9 +21,6 @@ build:
     DOCKER_DRIVER: overlay2
   script:
     - docker build -t ${CI_PROJECT_PATH_SLUG} .
-  only:
-    variables:
-      - $BUILD_DOCKER_IMAGE
 
 publish:
   stage: review
