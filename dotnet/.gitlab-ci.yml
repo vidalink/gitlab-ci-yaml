@@ -1,7 +1,7 @@
 image: alpine:latest
 
 variables:
-  CI_DEBUG_TRACE: "false"
+  CI_DEBUG_TRACE: "true"
   CODE_QUALITY_DISABLED: "true"
   DEPENDENCY_SCANNING_DISABLED: "true"
   PERFORMANCE_DISABLED: "true"
