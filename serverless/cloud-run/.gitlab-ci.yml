@@ -4,10 +4,11 @@ before_script:
   - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
   - if [ ! $TIMEOUT ]; then export TIMEOUT='2m'; fi
   - if [ ! $PROJECT_PATH ]; then export PROJECT_PATH='.'; fi
+  - if [ ! $STEP_ENV ]; then export STEP_ENV=''; fi
 
 stages:
   - build
-  - test
+  - review
   - production
 
 build:
@@ -22,11 +23,12 @@ build:
     - cd ${PROJECT_PATH}
     - docker build -t ${CI_PROJECT_PATH_SLUG} .
 
-test:
-  stage: test
+review:
+  stage: review
   image: google/cloud-sdk:latest
-  environment: test
+  environment: review
   script:
+    - export STEP_ENV=review
     - printenv
     - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
     - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/test-${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
@@ -50,6 +52,7 @@ production:
   image: google/cloud-sdk:latest
   environment: production
   script:
+    - export STEP_ENV=production
     - printenv
     - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
     - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
