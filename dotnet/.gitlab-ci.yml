@@ -23,6 +23,3 @@ include:
   - template: Auto-DevOps.gitlab-ci.yml
   - remote: 'https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/templates/dotnet/sonar/.gitlab-ci-template.yml'
   - remote: 'https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/templates/postman/.gitlab-ci-template.yml'
-
-after_script:
-  - printenv
