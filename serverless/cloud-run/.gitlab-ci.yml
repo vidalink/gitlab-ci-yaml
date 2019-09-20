@@ -35,7 +35,7 @@ review:
     - gcloud builds submit --tag ${TAG} ${PROJECT_PATH}
     - echo ${ENV_VARS}
     - echo ${AUTH}
-    - gcloud beta run deploy review-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars=[${ENV_VARS}]
+    - gcloud beta run deploy review-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS}
     - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding review-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
   only:
     refs:
