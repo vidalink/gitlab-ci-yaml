@@ -1,7 +1,7 @@
 image: alpine:latest
 
 before_script:
-  - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
+  - if [ "$PUBLIC" == "true" ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
   - if [ ! $TIMEOUT ]; then export TIMEOUT='2m'; fi
   - if [ ! $PROJECT_PATH ]; then export PROJECT_PATH='.'; fi
 
