@@ -29,7 +29,6 @@ review:
   environment: review
   script:
     - export STEP_ENV=review
-    - printenv
     - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
     - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/test-${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
     - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
@@ -53,7 +52,6 @@ production:
   environment: production
   script:
     - export STEP_ENV=production
-    - printenv
     - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
     - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
     - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
@@ -67,3 +65,6 @@ production:
       - master
     variables:
       - $GCLOUD_PROJECT_REGION
+      
+after_script:
+  - printenv
