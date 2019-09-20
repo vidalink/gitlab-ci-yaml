@@ -2,7 +2,6 @@ image: alpine:latest
 
 before_script:
   - if [ ! $DOTNET_SDK_DOCKER_IMAGE ]; then export DOTNET_SDK_DOCKER_IMAGE='microsoft/dotnet:2.2-sdk-alpine'; fi
-  - printenv
 
 stages:
   - build
@@ -26,3 +25,6 @@ include:
   - template: Auto-DevOps.gitlab-ci.yml
   - remote: 'https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/templates/dotnet/sonar/.gitlab-ci-template.yml'
   - remote: 'https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/templates/postman/.gitlab-ci-template.yml'
+
+after_script:
+  - printenv
