@@ -1,12 +1,6 @@
 image: alpine:latest
 
 before_script:
-  - export CI_DEBUG_TRACE=true
-  - export CODE_QUALITY_DISABLED=true
-  - export DEPENDENCY_SCANNING_DISABLED=true
-  - export PERFORMANCE_DISABLED=true
-  - export POSTGRES_ENABLED=false
-  - export TEST_DISABLED=true
   - if [ ! $DOTNET_SDK_DOCKER_IMAGE ]; then export DOTNET_SDK_DOCKER_IMAGE='microsoft/dotnet:2.2-sdk-alpine'; fi
   - printenv
 
