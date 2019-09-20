@@ -1,5 +1,3 @@
-image: alpine:latest
-
 before_script:
   - if [ ! $DOTNET_SDK_DOCKER_IMAGE ]; then export DOTNET_SDK_DOCKER_IMAGE='microsoft/dotnet:2.2-sdk-alpine'; fi
 
