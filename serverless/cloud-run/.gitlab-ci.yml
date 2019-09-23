@@ -1,7 +1,6 @@
 image: alpine:latest
 
 before_script:
-  - if [ ! $PUBLIC ]; then export PUBLIC=''; else export PUBLIC='--allow-unauthenticated'; fi
   - if [ ! $TIMEOUT ]; then export TIMEOUT='2m'; fi
   - if [ ! $PROJECT_PATH ]; then export PROJECT_PATH='.'; fi
 
@@ -33,10 +32,11 @@ review:
     - gcloud auth activate-service-account --key-file ${TMP_FILE}
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
     - gcloud builds submit --tag ${TAG} ${PROJECT_PATH}
+    - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
     - echo ${ENV_VARS}
-    - echo ${PUBLIC}
-    - gcloud beta run deploy review-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${PUBLIC} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS}
-    - if [ ! -z $PUBLIC ]; then gcloud beta run services add-iam-policy-binding review-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
+    - echo ${AUTH}
+    - gcloud beta run deploy review-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS}
+    - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding review-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
   only:
     refs:
       - branches
@@ -57,8 +57,9 @@ production:
     - gcloud auth activate-service-account --key-file ${TMP_FILE}
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
     - gcloud builds submit --tag ${TAG} ${PROJECT_PATH}
-    - gcloud beta run deploy ${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${PUBLIC} --timeout ${TIMEOUT}
-    - if [ ! -z $PUBLIC ]; then gcloud beta run services add-iam-policy-binding ${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
+    - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
+    - gcloud beta run deploy ${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT}
+    - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
   only:
     refs:
       - master
