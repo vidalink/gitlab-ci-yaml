@@ -28,7 +28,7 @@ review:
   environment: review
   script:
     - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
-    - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
+    - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/${CI_JOB_STAGE}-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
     - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
     - gcloud auth activate-service-account --key-file ${TMP_FILE}
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
@@ -36,8 +36,8 @@ review:
     - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
     - echo ${ENV_VARS}
     - echo ${AUTH}
-    - gcloud beta run deploy ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS}
-    - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
+    - gcloud beta run deploy ${CI_JOB_STAGE}-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS}
+    - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_JOB_STAGE}-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
   only:
     refs:
       - branches
@@ -71,6 +71,7 @@ production:
   stage: production
   image: google/cloud-sdk:latest
   environment: production
+  when: manual
   script:
     - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
     - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
