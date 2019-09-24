@@ -3,6 +3,7 @@ before_script:
   - if [ ! $PROJECT_TEST_PATH ]; then export PROJECT_TEST_PATH='./src/Test'; fi
   - if [ ! $PROJECT_API_PATH ]; then export PROJECT_API_PATH='./src/Api'; fi
   - if [ ! $PROJECT_SLN_PATH ]; then export PROJECT_SLN_PATH='./src'; fi
+  - printenv
 
 stages:
   - quality gate
