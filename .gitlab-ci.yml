@@ -10,6 +10,7 @@ variables:
   PROJECT_API_PATH: 'src/Api'
   PROJECT_SLN_PATH: 'src'
   PROJECT_TEST_PATH: 'src/Test'
+  KUBE_INGRESS_BASE_DOMAIN: 'svc.cluster.local'
 
 stages:
   - build
