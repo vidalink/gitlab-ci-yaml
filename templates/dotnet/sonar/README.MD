@@ -3,8 +3,6 @@ Esse template inclui no pipeline uma etapa de "quality gate" para execução do 
 
 ## Variáveis padrões
 Algumas variaveis definem um comportamento padrão dessa etapa. São elas:
-- DOTNET_SDK_DOCKER_IMAGE: **'microsoft/dotnet:2.2-sdk-alpine'**
-  - _Por padrão, executa projetos baseados em dotnet core 2.2, mas pode ser redefinido para outras versões como: microsoft/dotnet:2.1-sdk-alpine_
 - PROJECT_TEST_PATH: **'./src/Test'**
   - _Caminho do projeto de teste_
 - PROJECT_API_PATH: **'./src/Api'**
@@ -25,4 +23,4 @@ Para implementar esse template, use:
 >
 > include:
 >   - ...
->   - remote: 'https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/templates/dotnet/sonar/.gitlab-ci-template.yml'
+>   - remote: 'https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/templates/dotnet/sonar/.gitlab-ci-dotnet{version-number}-template.yml'
