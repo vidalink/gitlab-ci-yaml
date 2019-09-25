@@ -71,7 +71,7 @@ production:
   stage: production
   image: google/cloud-sdk:latest
   environment: production
-  when: manual
+  #when: manual
   script:
     - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
     - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
