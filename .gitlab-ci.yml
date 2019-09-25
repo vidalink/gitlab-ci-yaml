@@ -7,6 +7,9 @@ variables:
   PERFORMANCE_DISABLED: "true"
   POSTGRES_ENABLED: "false"
   TEST_DISABLED: "true"
+  PROJECT_API_PATH: 'src/Api'
+  PROJECT_SLN_PATH: 'src'
+  PROJECT_TEST_PATH: 'src/Test'
 
 stages:
   - build
