@@ -11,6 +11,7 @@ variables:
   PROJECT_SLN_PATH: 'src'
   PROJECT_TEST_PATH: 'src/Test'
   KUBE_INGRESS_BASE_DOMAIN: 'svc.cluster.local'
+  DOTNET_DOCKER_IMAGE: 'microsoft/dotnet:2.1-sdk-alpine'
 
 stages:
   - build
