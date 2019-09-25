@@ -3,6 +3,7 @@ before_script:
   - if [ ! $PROJECT_TEST_PATH ]; then export PROJECT_TEST_PATH='./src/Test'; fi
   - if [ ! $PROJECT_API_PATH ]; then export PROJECT_API_PATH='./src/Api'; fi
   - if [ ! $PROJECT_SLN_PATH ]; then export PROJECT_SLN_PATH='./src'; fi
+  - echo '**************************************************************************************************'
   - printenv
 
 stages:
@@ -15,6 +16,8 @@ quality:
     entrypoint: ["/bin/sh", "-c"]
   allow_failure: true
   script:
+    - echo '**************************************************************************************************'
+    - printenv
     - apk add --no-cache --update openjdk8-jre nss
     - dotnet tool install --global dotnet-sonarscanner
     - export PATH=${PATH}:/root/.dotnet/tools
