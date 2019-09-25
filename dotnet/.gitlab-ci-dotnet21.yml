@@ -1,0 +1,25 @@
+variables:
+  - DOTNET_SDK_DOCKER_IMAGE: 'microsoft/dotnet:2.1-sdk-alpine'
+
+stages:
+  - build
+  - quality gate
+  - test
+  - deploy
+  - review
+  - dast
+  - staging
+  - canary
+  - validation
+  - production
+  - incremental rollout 10%
+  - incremental rollout 25%
+  - incremental rollout 50%
+  - incremental rollout 100%
+  - performance
+  - cleanup
+
+include:
+  - template: Auto-DevOps.gitlab-ci.yml
+  - remote: 'https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/templates/dotnet/sonar/.gitlab-ci-dotnet21-template.yml'
+  - remote: 'https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/templates/postman/.gitlab-ci-template.yml'
