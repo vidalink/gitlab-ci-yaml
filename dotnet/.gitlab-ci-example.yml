@@ -1,0 +1,39 @@
+# Isso é apenas um exemplo, não deve ser usado em aplicações
+image: alpine:latest
+
+variables:
+  CI_DEBUG_TRACE: 'false'
+  CODE_QUALITY_DISABLED: 'true'
+  DEPENDENCY_SCANNING_DISABLED: 'true'
+  PERFORMANCE_DISABLED: 'true'
+  POSTGRES_ENABLED: 'false'
+  TEST_DISABLED: 'true'
+  PROJECT_API_PATH: 'src/Api'
+  PROJECT_SLN_PATH: 'src'
+  PROJECT_TEST_PATH: 'src/Test'
+
+before_script:
+  - if [ -z $RELEASE ] || [ $RELEASE != "production" ]; then export KUBE_INGRESS_BASE_DOMAIN="$MY_TEST_DOMAIN"; else export KUBE_INGRESS_BASE_DOMAIN="$MY_COMPANY_DOMAIN"; fi
+
+stages:
+  - build
+  - quality gate
+  - test
+  - deploy
+  - review
+  - dast
+  - staging
+  - canary
+  - validation
+  - production
+  - incremental rollout 10%
+  - incremental rollout 25%
+  - incremental rollout 50%
+  - incremental rollout 100%
+  - performance
+  - cleanup
+
+include:
+  - template: Auto-DevOps.gitlab-ci.yml
+  - remote: https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/dotnet/sonar/.gitlab-ci-dotnet22-template.yml
+  - remote: https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/general/postman/.gitlab-ci-template.yml
