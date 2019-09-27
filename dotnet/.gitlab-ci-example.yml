@@ -12,9 +12,6 @@ variables:
   PROJECT_SLN_PATH: 'src'
   PROJECT_TEST_PATH: 'src/Test'
 
-before_script:
-  - if [ -z $RELEASE ] || [ $RELEASE != "production" ]; then export KUBE_INGRESS_BASE_DOMAIN="$MY_TEST_DOMAIN"; else export KUBE_INGRESS_BASE_DOMAIN="$MY_COMPANY_DOMAIN"; fi
-
 stages:
   - build
   - quality gate
@@ -33,7 +30,15 @@ stages:
   - performance
   - cleanup
 
+before_script:
+  - echo $CI_PROJECT_PATH_SLUG
+  - echo $KUBE_INGRESS_BASE_DOMAIN
+
 include:
   - template: Auto-DevOps.gitlab-ci.yml
   - remote: https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/dotnet/sonar/.gitlab-ci-dotnet22-template.yml
   - remote: https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/general/postman/.gitlab-ci-template.yml
+
+after_script:
+  - echo $CI_PROJECT_PATH_SLUG
+  - echo $KUBE_INGRESS_BASE_DOMAIN
