@@ -11,6 +11,7 @@ variables:
   PROJECT_API_PATH: 'src/Api'
   PROJECT_SLN_PATH: 'src'
   PROJECT_TEST_PATH: 'src/Test'
+  K8S_SECRET_ASPNETCORE_ENVIRONMENT: '$CI_JOB_STAGE'
 
 stages:
   - build
