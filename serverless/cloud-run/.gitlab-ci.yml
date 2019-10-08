@@ -10,7 +10,7 @@ stages:
   - staging
   - production
 
-build-$CI_PROJECT_PATH_SLUG:
+build-${CI_PROJECT_PATH_SLUG}:
   stage: build
   image: docker:stable
   services:
