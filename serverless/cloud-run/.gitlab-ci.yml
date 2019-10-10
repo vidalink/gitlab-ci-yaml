@@ -3,7 +3,7 @@ image: alpine:latest
 before_script:
   - if [ ! $TIMEOUT ]; then export TIMEOUT='2m'; fi
   - if [ ! $PROJECT_PATH ]; then export PROJECT_PATH='.'; fi
-  - if [ ! $MEMORY_RUN ]; then export MEMORY_RUN='256 MiB'; fi
+  - if [ ! $MEMORY_RUN ]; then export MEMORY_RUN='256 Mi'; fi
 
 stages:
   - build
