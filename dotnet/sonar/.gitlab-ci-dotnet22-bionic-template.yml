@@ -8,7 +8,7 @@ quality:
     #entrypoint: ["/bin/sh"]
   allow_failure: true
   script:
-    - sh setup-sonar.sh
+    - /bin/sh setup-sonar.sh
   only:
     refs:
       - branches
