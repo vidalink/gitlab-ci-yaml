@@ -10,7 +10,7 @@ quality:
   script:
     - wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/dotnet/sonar/setup-sonar.sh -O setup-sonar.sh
     - ls
-    - /bin/sh setup-sonar.sh
+    #- /bin/sh setup-sonar.sh
   only:
     refs:
       - branches
