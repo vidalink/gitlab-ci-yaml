@@ -8,7 +8,9 @@ quality:
     entrypoint: ["/bin/sh", "-c"]
   allow_failure: true
   script:
-    - sh setup-sonar.sh
+    - wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/dotnet/sonar/setup-sonar.sh -O setup-sonar.sh
+    - ls
+    - setup-sonar.sh
   only:
     refs:
       - branches
