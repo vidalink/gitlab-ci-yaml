@@ -4,7 +4,7 @@ stages:
 quality:
   stage: quality gate
   image:
-    name: microsoft/dotnet:2.2-sdk-alpine
+    name: microsoft/dotnet:2.2-sdk-bionic
     entrypoint: ["/bin/sh", "-c"]
   allow_failure: true
   script:
