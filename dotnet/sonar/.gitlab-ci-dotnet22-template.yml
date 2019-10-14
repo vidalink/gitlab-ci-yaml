@@ -17,6 +17,7 @@ quality:
     - dotnet build ${PROJECT_SLN_PATH}
     - dotnet test ${PROJECT_TEST_PATH} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
     - dotnet sonarscanner end /d:sonar.login=${SONAR_LOGIN}
+  coverage: '/Average.\|.+\%.\|.(.+)\%.+\|./'
   only:
     refs:
       - branches
