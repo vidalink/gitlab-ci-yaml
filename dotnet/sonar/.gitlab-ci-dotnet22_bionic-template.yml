@@ -9,7 +9,6 @@ quality:
   allow_failure: true
   script:
     - apk add --no-cache --update openjdk8-jre nss
-    #- /bin/bash/ setup-sonar.sh
   only:
     refs:
       - branches
