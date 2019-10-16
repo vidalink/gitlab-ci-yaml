@@ -8,9 +8,11 @@ quality:
     entrypoint: [
       "/bin/bash",
       "wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/dotnet/sonar/setup-sonar.sh -O setup-sonar.sh",
-      "setup-sonar.sh"
+      "/bin/bash"
     ]
   allow_failure: true
+  script:
+    - setup-sonar.sh
   only:
     refs:
       - branches
