@@ -6,12 +6,11 @@ quality:
   image:
     name: microsoft/dotnet:2.2-sdk-bionic
     entrypoint: [
-      "/bin/bash",
-      "wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/dotnet/sonar/setup-sonar.sh -O setup-sonar.sh",
       "/bin/bash"
     ]
   allow_failure: true
   script:
+    - wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/dotnet/sonar/setup-sonar.sh -O setup-sonar.sh
     - setup-sonar.sh
   only:
     refs:
