@@ -5,13 +5,10 @@ quality:
   stage: quality gate
   image:
     name: microsoft/dotnet:2.2-sdk-bionic
-    entrypoint: [
-      "/bin/bash"
-    ]
+    entrypoint: ["/bin/bash"]
   allow_failure: true
   script:
-    - wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/dotnet/sonar/setup-sonar.sh -O setup-sonar.sh
-    - ls
+    - apk add --no-cache --update openjdk8-jre nss
     #- /bin/bash/ setup-sonar.sh
   only:
     refs:
