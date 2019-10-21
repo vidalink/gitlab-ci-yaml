@@ -5,7 +5,7 @@ quality:
   stage: quality gate
   image:
     name: microsoft/dotnet:2.2-sdk-stretch
-    entrypoint: ["/bin/sh", "-c"]
+    entrypoint: ["/bin/bash", "-c"]
   allow_failure: true
   script:
     - apk add --no-cache --update openjdk8-jre nss
