@@ -15,7 +15,7 @@ quality:
     - dotnet restore --configfile ${PROJECT_API_PATH}/nuget.config ${PROJECT_API_PATH}
     - dotnet restore --configfile ${PROJECT_TEST_PATH}/nuget.config ${PROJECT_TEST_PATH}
     - dotnet build ${PROJECT_SLN_PATH}
-    - dotnet test ${PROJECT_TEST_PATH} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+    - dotnet test ${PROJECT_TEST_PATH} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude="[Program.cs]"
     - dotnet sonarscanner end /d:sonar.login=${SONAR_LOGIN}
   only:
     refs:
