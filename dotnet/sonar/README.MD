@@ -9,6 +9,8 @@ Algumas variaveis definem um comportamento padrão dessa etapa. São elas:
   - _Caminho do projeto de api_
 - PROJECT_SLN_PATH: **'./src'**
   - _Caminho da solution (é necessário um arquivo .sln agrupando os projetos)_
+- TEST_PARAMETER: **'--filter LocalOnly!=LocalOnly'**
+  - _Variável para utilizar parâmetros adicionais na execução do teste. Útil para passar filtros de testes que não podem ser executados no pipeline_
   
 ## Variáveis necessárias
 As variáveis a seguir são necessárias para que essa etapa funcione no seu pipeline. Vou listar com exemplos para ilustrar:
