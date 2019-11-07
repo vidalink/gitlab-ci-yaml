@@ -1,5 +1,6 @@
 before_script:
   - if [ ! $TEST_PARAMETER ]; then export TEST_PARAMETER=''; fi
+
 stages:
   - quality gate
 
