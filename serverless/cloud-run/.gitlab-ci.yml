@@ -103,11 +103,11 @@ stop_review:
   allow_failure: true
   script:
     - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
-    - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/review-${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
+    - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/review-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
     - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
     - gcloud auth activate-service-account --key-file ${TMP_FILE}
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
-    - gcloud beta run services delete review-${CI_PROJECT_PATH_SLUG} --platform managed --region ${GCLOUD_PROJECT_REGION}
+    - gcloud beta run services delete review-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG} --platform managed --region ${GCLOUD_PROJECT_REGION} --quiet
     - gcloud container images delete ${TAG} --force-delete-tags --quiet
   only:
     refs:
