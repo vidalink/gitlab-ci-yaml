@@ -11,6 +11,7 @@ stages:
   - review
   - staging
   - production
+  - cleanup
 
 build:
   stage: build
@@ -93,3 +94,26 @@ production:
       - master
     variables:
       - $GCLOUD_PROJECT_REGION
+      
+stop_review:
+  stage: cleanup
+  image: google/cloud-sdk:latest
+  environment: review
+  when: manual
+  allow_failure: true
+  script:
+    - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
+    - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/review-${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
+    - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
+    - gcloud auth activate-service-account --key-file ${TMP_FILE}
+    - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
+    - gcloud beta run services delete ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG}
+    - gcloud container images delete ${TAG} --force-delete-tags --quiet
+  only:
+    refs:
+      - branches
+    variables:
+      - $GCLOUD_PROJECT_REGION
+  except:
+    refs:
+      - master
