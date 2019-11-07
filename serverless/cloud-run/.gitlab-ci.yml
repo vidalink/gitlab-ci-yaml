@@ -27,7 +27,9 @@ build:
 review:
   stage: review
   image: google/cloud-sdk:latest
-  environment: review
+  environment:
+    name: review
+    on_stop: stop_review
   script:
     - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
     - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/${CI_JOB_STAGE}-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
@@ -97,8 +99,12 @@ production:
       
 stop_review:
   stage: cleanup
+  variables:
+    GIT_STRATEGY: none
   image: google/cloud-sdk:latest
-  environment: review
+  environment:
+    name: review
+    action: stop
   when: manual
   allow_failure: true
   script:
