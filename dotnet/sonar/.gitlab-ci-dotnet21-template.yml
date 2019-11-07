@@ -1,3 +1,6 @@
+before_script:
+  - if [ ! $TEST_PARAMETER ]; then export TEST_PARAMETER=''; fi
+
 stages:
   - quality gate
 
@@ -15,7 +18,7 @@ quality:
     - dotnet restore --configfile ${PROJECT_API_PATH}/nuget.config ${PROJECT_API_PATH}
     - dotnet restore --configfile ${PROJECT_TEST_PATH}/nuget.config ${PROJECT_TEST_PATH}
     - dotnet build ${PROJECT_SLN_PATH}
-    - dotnet test ${PROJECT_TEST_PATH} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+    - dotnet test ${PROJECT_TEST_PATH} ${TEST_PARAMETER} /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
     - dotnet sonarscanner end /d:sonar.login=${SONAR_LOGIN}
   only:
     refs:
