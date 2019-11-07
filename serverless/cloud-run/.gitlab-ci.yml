@@ -107,7 +107,7 @@ stop_review:
     - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
     - gcloud auth activate-service-account --key-file ${TMP_FILE}
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
-    - gcloud beta run services delete review-${CI_PROJECT_PATH_SLUG} --platform managed
+    - gcloud beta run services delete review-${CI_PROJECT_PATH_SLUG} --platform managed --region ${GCLOUD_PROJECT_REGION}
     - gcloud container images delete ${TAG} --force-delete-tags --quiet
   only:
     refs:
