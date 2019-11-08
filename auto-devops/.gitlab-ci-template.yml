@@ -1,0 +1,25 @@
+.redundancy: &redundancy_template
+  extends: .auto-deploy
+  stage: redundancy
+  script:
+    - auto-deploy check_kube_domain
+    - auto-deploy download_chart
+    - auto-deploy ensure_namespace
+    - auto-deploy initialize_tiller
+    - auto-deploy create_secret
+    - auto-deploy deploy
+    - auto-deploy persist_environment_url
+  environment:
+    name: redundancy
+    url: http://$CI_PROJECT_PATH_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+  artifacts:
+    paths: [environment_url.txt]
+
+redundancy:
+  <<: *redundancy_template
+  allow_failure: false
+  only:
+    kubernetes: active
+    variables:
+      - $CI_DEFAULT_BRANCH == $CI_COMMIT_REF_NAME
+      - $STAGING_ENABLED
