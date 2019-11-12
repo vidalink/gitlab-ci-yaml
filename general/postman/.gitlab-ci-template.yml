@@ -40,5 +40,6 @@ postman:
       - dev
     variables:
       - $COLLECTION && $COLLECTION_VARS
+      - $COLLECTION_SCENARIOS == null
   artifacts:
     expire_in: 1 hour
