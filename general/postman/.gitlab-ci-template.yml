@@ -13,7 +13,7 @@ postman_scenarios:
   script:
     - export CI_ENVIRONMENT_URL=$(cat environment_url.txt)
     - sed -i 's#%%URL%%#'"$CI_ENVIRONMENT_URL"'#g' $COLLECTION_VARS
-    - wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/convert_test_cases.js -O convert_test_cases.js
+    - wget https://raw.githubusercontent.com/vidalink/gitlab-ci-yaml/master/general/postman/convert_test_cases.js -O convert_test_cases.js
     - newman --version
     - for scen in ${COLLECTION_SCENARIOS}.*.json; do node convert_test_cases "$scen" converted_scenarios.json; newman run $COLLECTION -e $COLLECTION_VARS --folder $(echo $scen | awk -F'.' '{print $2}') -d converted_scenarios.json --delay-request 100; done;
   only:
