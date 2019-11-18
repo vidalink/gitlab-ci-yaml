@@ -13,6 +13,7 @@ quality:
   script:
     - /bin/bash
     - echo ${CI_PROJECT_PATH_SLUG}
+    - printenv
     - dotnet sonarscanner begin /k:"${CI_PROJECT_PATH_SLUG}"  /d:sonar.host.url="${SONAR_HOST_URL}" /d:sonar.language="cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*" /d:sonar.login="${SONAR_LOGIN}"  /d:sonar.cs.opencover.reportsPaths="${PROJECT_TEST_PATH}/coverage.opencover.xml" /d:sonar.coverage.exclusions="**Test*.cs,Program.cs"
     - dotnet restore --configfile ${PROJECT_API_PATH}/nuget.config ${PROJECT_API_PATH}
     - dotnet restore --configfile ${PROJECT_TEST_PATH}/nuget.config ${PROJECT_TEST_PATH}
