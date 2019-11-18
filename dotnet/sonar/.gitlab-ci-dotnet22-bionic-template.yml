@@ -1,5 +1,8 @@
 before_script:
   - if [ ! $TEST_PARAMETER ]; then export TEST_PARAMETER=''; fi
+  - if [ ! $PROJECT_API_PATH ]; then export PROJECT_API_PATH='src/Api'; fi
+  - if [ ! $PROJECT_SLN_PATH ]; then export PROJECT_SLN_PATH='src'; fi
+  - if [ ! $PROJECT_TEST_PATH ]; then export PROJECT_TEST_PATH='src/Test'; fi
 
 stages:
   - quality gate
