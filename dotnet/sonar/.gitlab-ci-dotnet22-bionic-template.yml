@@ -8,7 +8,7 @@ quality:
   stage: quality gate
   image:
     name: vdlk/sonarscanner:1.0
-    entrypoint: ["/bin/csh", "-c"]
+    entrypoint: ["/bin/sh", "-c"]
   allow_failure: true
   script:
     - dotnet sonarscanner begin /k:"${CI_PROJECT_PATH_SLUG}"  /d:sonar.host.url="${SONAR_HOST_URL}" /d:sonar.language="cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*" /d:sonar.login="${SONAR_LOGIN}"  /d:sonar.cs.opencover.reportsPaths="${PROJECT_TEST_PATH}/coverage.opencover.xml" /d:sonar.coverage.exclusions="**Test*.cs,Program.cs"
