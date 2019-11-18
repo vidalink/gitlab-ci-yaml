@@ -7,7 +7,7 @@ stages:
 quality:
   stage: quality gate
   image:
-    name: vdlk/sonarscanner:1.0
+    name: vdlk/sonarscanner:1.2
     entrypoint: ["/bin/sh", "-c"]
   allow_failure: true
   script:
