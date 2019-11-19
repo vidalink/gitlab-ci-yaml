@@ -68,11 +68,6 @@ staging:
     - gcloud beta run deploy ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN}
     - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
     - export CLOUD_RUN_URL=$(gcloud beta run services describe ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --platform managed --region ${GCLOUD_PROJECT_REGION} --format "value(status.address.url)")
-    - echo ${CI_JOB_STAGE}
-    - echo ${CI_PROJECT_PATH_SLUG}
-    - echo ${CLOUD_RUN_URL}
-    - echo ${GCLOUD_PROJECT_REGION}
-    - echo $(gcloud beta run services describe ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --platform managed --region ${GCLOUD_PROJECT_REGION} --format "value(status.address.url)")
     - if [ $SCHEDULE ]; then gcloud beta scheduler jobs delete ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --quiet || echo "No scheduled job found to delete"; fi
     - if [ $SCHEDULE ]; then gcloud beta scheduler jobs create http ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --schedule "${SCHEDULE_CRON}" --uri "${CLOUD_RUN_URL}${SCHEDULE_URL}" --http-method ${SCHEDULE_VERB} --headers=${SCHEDULE_HEADER} --description="${SCHEDULE_DESCRIPTION}" --message-body="${SCHEDULE_BODY}" --time-zone="${SCHEDULE_TIME_ZONE}" --oidc-service-account-email="${SCHEDULE_SERVICE_ACCOUNT}"; gcloud beta scheduler jobs ${SCHEDULE_STATUS} ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG}; fi
   only:
@@ -97,7 +92,7 @@ production:
     - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
     - gcloud beta run deploy ${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN}
     - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
-    - export CLOUD_RUN_URL=$(gcloud beta run services describe ${CI_PROJECT_PATH_SLUG} --platform managed --region ${GCLOUD_PROJECT_REGION} --format "value(status.address.hostname)")
+    - export CLOUD_RUN_URL=$(gcloud beta run services describe ${CI_PROJECT_PATH_SLUG} --platform managed --region ${GCLOUD_PROJECT_REGION} --format "value(status.address.url)")
     - if [ $SCHEDULE ]; then gcloud beta scheduler jobs delete ${CI_PROJECT_PATH_SLUG} --quiet || echo "No scheduled job found to delete"; fi
     - if [ $SCHEDULE ]; then gcloud beta scheduler jobs create http ${CI_PROJECT_PATH_SLUG} --schedule "${SCHEDULE_CRON}" --uri "${CLOUD_RUN_URL}${SCHEDULE_URL}" --http-method ${SCHEDULE_VERB} --headers=${SCHEDULE_HEADER} --description="${SCHEDULE_DESCRIPTION}" --message-body="${SCHEDULE_BODY}" --time-zone="${SCHEDULE_TIME_ZONE}" --oidc-service-account-email="${SCHEDULE_SERVICE_ACCOUNT}"; gcloud beta scheduler jobs ${SCHEDULE_STATUS} ${CI_PROJECT_PATH_SLUG}; fi
   only:
