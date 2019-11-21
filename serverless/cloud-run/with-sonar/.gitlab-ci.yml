@@ -8,6 +8,8 @@ before_script:
   - if [ ! $PROJECT_API_PATH ]; then export PROJECT_API_PATH='src/Api'; fi
   - if [ ! $PROJECT_SLN_PATH ]; then export PROJECT_SLN_PATH='src'; fi
   - if [ ! $PROJECT_TEST_PATH ]; then export PROJECT_TEST_PATH='src/Test'; fi
+  - if [ ! $MAX-INSTANCES ]; then export MAX-INSTANCES='100'; fi
+  - if [ ! $CONCURRENCY ]; then export CONCURRENCY='80'; fi
 
 stages:
   - build
@@ -42,7 +44,7 @@ review:
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
     - gcloud builds submit --tag ${TAG} .
     - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
-    - gcloud beta run deploy ${CI_JOB_STAGE}-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN}
+    - gcloud beta run deploy ${CI_JOB_STAGE}-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN} --max-instances ${MAX-INSTANCES} --concurrency=${CONCURRENCY} 
     - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_JOB_STAGE}-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
   only:
     refs:
@@ -65,7 +67,7 @@ staging:
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
     - gcloud builds submit --tag ${TAG} .
     - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
-    - gcloud beta run deploy ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN}
+    - gcloud beta run deploy ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN} --max-instances ${MAX-INSTANCES} --concurrency=${CONCURRENCY}
     - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
     - export CLOUD_RUN_URL=$(gcloud beta run services describe ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --platform managed --region ${GCLOUD_PROJECT_REGION} --format "value(status.address.url)")
     - if [ $SCHEDULE ]; then gcloud beta scheduler jobs delete ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --quiet || echo "No scheduled job found to delete"; fi
@@ -90,7 +92,7 @@ production:
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
     - gcloud builds submit --tag ${TAG} .
     - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
-    - gcloud beta run deploy ${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN}
+    - gcloud beta run deploy ${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN} --max-instances ${MAX-INSTANCES} --concurrency=${CONCURRENCY}
     - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
     - export CLOUD_RUN_URL=$(gcloud beta run services describe ${CI_PROJECT_PATH_SLUG} --platform managed --region ${GCLOUD_PROJECT_REGION} --format "value(status.address.url)")
     - if [ $SCHEDULE ]; then gcloud beta scheduler jobs delete ${CI_PROJECT_PATH_SLUG} --quiet || echo "No scheduled job found to delete"; fi
