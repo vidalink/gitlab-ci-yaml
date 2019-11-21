@@ -29,6 +29,9 @@ build:
     DOCKER_DRIVER: overlay2
   script:
     - docker build -t ${CI_PROJECT_PATH_SLUG} .
+  except:
+    refs:
+      - master
 
 review:
   stage: review
