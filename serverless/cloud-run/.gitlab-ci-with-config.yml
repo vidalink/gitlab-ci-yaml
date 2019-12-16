@@ -28,7 +28,7 @@ build:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
   script:
-    - docker build -t ${CI_PROJECT_PATH_SLUG} .
+    - docker build --build-arg ENVIRONMENT=${$CI_JOB_STAGE} -t ${CI_PROJECT_PATH_SLUG} .
   except:
     refs:
       - master
@@ -45,7 +45,7 @@ review:
     - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
     - gcloud auth activate-service-account --key-file ${TMP_FILE}
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
-    - gcloud builds submit --tag ${TAG} . --config config_review.yaml
+    - gcloud builds submit --tag ${TAG} .
     - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
     - gcloud beta run deploy ${CI_JOB_STAGE}-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN} --max-instances ${MAX_INSTANCES} --concurrency=${CONCURRENCY} 
     - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_JOB_STAGE}-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
@@ -68,7 +68,7 @@ staging:
     - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
     - gcloud auth activate-service-account --key-file ${TMP_FILE}
     - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
-    - gcloud builds submit --tag ${TAG} . --config config_review.yaml
+    - gcloud builds submit --tag ${TAG} .
     - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
     - gcloud beta run deploy ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN} --max-instances ${MAX_INSTANCES} --concurrency=${CONCURRENCY}
     - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
