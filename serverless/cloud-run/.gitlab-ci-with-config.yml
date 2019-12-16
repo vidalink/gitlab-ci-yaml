@@ -1,0 +1,134 @@
+image: alpine:latest
+
+before_script:
+  - if [ ! $TIMEOUT ]; then export TIMEOUT='2m'; fi
+  - if [ ! $PROJECT_PATH ]; then export PROJECT_PATH='.'; fi
+  - if [ ! $MEMORY_RUN ]; then export MEMORY_RUN='256M'; fi
+  - if [ ! $SCHEDULE ]; then export SCHEDULE=''; fi
+  - if [ ! $PROJECT_API_PATH ]; then export PROJECT_API_PATH='src/Api'; fi
+  - if [ ! $PROJECT_SLN_PATH ]; then export PROJECT_SLN_PATH='src'; fi
+  - if [ ! $PROJECT_TEST_PATH ]; then export PROJECT_TEST_PATH='src/Test'; fi
+  - if [ ! $MAX_INSTANCES ]; then export MAX_INSTANCES='100'; fi
+  - if [ ! $CONCURRENCY ]; then export CONCURRENCY='80'; fi
+
+stages:
+  - build
+  - quality gate
+  - review
+  - staging
+  - production
+  - cleanup
+  
+build:
+  stage: build
+  image: docker:stable
+  services:
+    - docker:18-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+  script:
+    - docker build -t ${CI_PROJECT_PATH_SLUG} .
+  except:
+    refs:
+      - master
+
+review:
+  stage: review
+  image: google/cloud-sdk:latest
+  environment:
+    name: review
+    on_stop: stop_review
+  script:
+    - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
+    - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/${CI_JOB_STAGE}-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
+    - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
+    - gcloud auth activate-service-account --key-file ${TMP_FILE}
+    - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
+    - gcloud builds submit --tag ${TAG} . --config config_review.yaml
+    - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
+    - gcloud beta run deploy ${CI_JOB_STAGE}-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN} --max-instances ${MAX_INSTANCES} --concurrency=${CONCURRENCY} 
+    - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_JOB_STAGE}-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
+  only:
+    refs:
+      - branches
+    variables:
+      - $GCLOUD_PROJECT_REGION
+  except:
+    refs:
+      - master
+      
+staging:
+  stage: staging
+  image: google/cloud-sdk:latest
+  environment: staging
+  script:
+    - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
+    - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
+    - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
+    - gcloud auth activate-service-account --key-file ${TMP_FILE}
+    - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
+    - gcloud builds submit --tag ${TAG} . --config config_review.yaml
+    - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
+    - gcloud beta run deploy ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN} --max-instances ${MAX_INSTANCES} --concurrency=${CONCURRENCY}
+    - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
+    - export CLOUD_RUN_URL=$(gcloud beta run services describe ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --platform managed --region ${GCLOUD_PROJECT_REGION} --format "value(status.address.url)")
+    - if [ $SCHEDULE ]; then gcloud beta scheduler jobs delete ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --quiet || echo "No scheduled job found to delete"; fi
+    - if [ $SCHEDULE ]; then gcloud beta scheduler jobs create http ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG} --schedule "${SCHEDULE_CRON}" --uri "${CLOUD_RUN_URL}${SCHEDULE_URL}" --http-method ${SCHEDULE_VERB} --headers=${SCHEDULE_HEADER} --description="${SCHEDULE_DESCRIPTION}" --message-body="${SCHEDULE_BODY}" --time-zone="${SCHEDULE_TIME_ZONE}" --oidc-service-account-email="${SCHEDULE_SERVICE_ACCOUNT}"; gcloud beta scheduler jobs ${SCHEDULE_STATUS} ${CI_JOB_STAGE}-${CI_PROJECT_PATH_SLUG}; fi
+  only:
+    refs:
+      - master
+    variables:
+      - $GCLOUD_PROJECT_REGION
+      
+production:
+  stage: production
+  image: google/cloud-sdk:latest
+  environment: production
+  when: manual
+  allow_failure: false
+  script:
+    - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
+    - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
+    - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
+    - gcloud auth activate-service-account --key-file ${TMP_FILE}
+    - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
+    - gcloud builds submit --tag ${TAG} .
+    - if [ $PUBLIC ]; then export AUTH='--allow-unauthenticated'; else export AUTH=''; fi
+    - gcloud beta run deploy ${CI_PROJECT_PATH_SLUG} --image ${TAG} --platform managed --region ${GCLOUD_PROJECT_REGION} ${AUTH} --timeout ${TIMEOUT} --update-env-vars ${ENV_VARS} --memory ${MEMORY_RUN} --max-instances ${MAX_INSTANCES} --concurrency=${CONCURRENCY}
+    - if [ ! -z $AUTH ]; then gcloud beta run services add-iam-policy-binding ${CI_PROJECT_PATH_SLUG} --member="allUsers" --role="roles/run.invoker" --region ${GCLOUD_PROJECT_REGION}; fi
+    - export CLOUD_RUN_URL=$(gcloud beta run services describe ${CI_PROJECT_PATH_SLUG} --platform managed --region ${GCLOUD_PROJECT_REGION} --format "value(status.address.url)")
+    - if [ $SCHEDULE ]; then gcloud beta scheduler jobs delete ${CI_PROJECT_PATH_SLUG} --quiet || echo "No scheduled job found to delete"; fi
+    - if [ $SCHEDULE ]; then gcloud beta scheduler jobs create http ${CI_PROJECT_PATH_SLUG} --schedule "${SCHEDULE_CRON}" --uri "${CLOUD_RUN_URL}${SCHEDULE_URL}" --http-method ${SCHEDULE_VERB} --headers=${SCHEDULE_HEADER} --description="${SCHEDULE_DESCRIPTION}" --message-body="${SCHEDULE_BODY}" --time-zone="${SCHEDULE_TIME_ZONE}" --oidc-service-account-email="${SCHEDULE_SERVICE_ACCOUNT}"; gcloud beta scheduler jobs ${SCHEDULE_STATUS} ${CI_PROJECT_PATH_SLUG}; fi
+  only:
+    refs:
+      - master
+    variables:
+      - $GCLOUD_PROJECT_REGION
+      
+stop_review:
+  stage: cleanup
+  variables:
+    GIT_STRATEGY: none
+  image: google/cloud-sdk:latest
+  environment:
+    name: review
+    action: stop
+  when: manual
+  allow_failure: true
+  script:
+    - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
+    - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/review-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG}:${CI_PIPELINE_ID}
+    - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
+    - gcloud auth activate-service-account --key-file ${TMP_FILE}
+    - gcloud config set project ${CLOUDSDK_CORE_PROJECT}
+    - gcloud beta run services delete review-${CI_COMMIT_REF_SLUG}-${CI_PROJECT_PATH_SLUG} --platform managed --region ${GCLOUD_PROJECT_REGION} --quiet
+    - gcloud container images delete ${TAG} --force-delete-tags --quiet
+  only:
+    refs:
+      - branches
+    variables:
+      - $GCLOUD_PROJECT_REGION
+  except:
+    refs:
+      - master
