@@ -28,7 +28,7 @@ build:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
   script:
-    - docker build --build-arg ENVIRONMENT={$CI_JOB_STAGE} -t ${CI_PROJECT_PATH_SLUG} .
+    - docker build --build-arg ENVIRONMENT=${CI_JOB_STAGE} -t ${CI_PROJECT_PATH_SLUG} .
   except:
     refs:
       - master
