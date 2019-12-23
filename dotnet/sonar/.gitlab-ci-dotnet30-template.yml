@@ -7,7 +7,7 @@ stages:
 quality:
   stage: quality gate
   image:
-    name: microsoft/dotnet:3.0-sdk-alpine
+    name: mcr.microsoft.com/dotnet/core/sdk:3.0.101-bionic
     entrypoint: ["/bin/sh", "-c"]
   script:
     - apk add --no-cache --update openjdk8-jre nss libc6-compat
