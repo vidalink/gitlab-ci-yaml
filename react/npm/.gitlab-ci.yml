@@ -17,7 +17,7 @@ variables:
 push-to-npm:
   stage: package
   script:
-    - npm install --prefix $SOLUTION_PATH -g
+    - npm install --prefix $SOLUTION_PATH
     - npm publish $SOLUTION_PATH --registry=$NPM_SOURCE_URL
   only:
     refs:
