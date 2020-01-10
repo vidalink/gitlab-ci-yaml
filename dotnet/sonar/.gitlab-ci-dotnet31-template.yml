@@ -10,8 +10,9 @@ quality:
     name: mcr.microsoft.com/dotnet/core/sdk:3.1.100-bionic
     entrypoint: [""]
   script:
-    - export TZ=America/Sao_Paulo
     - export TERM=xterm
+    - export TZ=America/Sao_Paulo
+    - export DEBIAN_FRONTEND=noninteractive
     - echo $TZ > /etc/timezone
     - apt-get update && apt-get install -y openjdk-8-jdk && apt-get install -y tzdata
     - rm /etc/localtime
