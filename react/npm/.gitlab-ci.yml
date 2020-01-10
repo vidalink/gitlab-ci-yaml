@@ -18,7 +18,9 @@ push-to-npm:
   stage: package
   script:
     - npm install --prefix $SOLUTION_PATH
+    - npm run build --prefix $SOLUTION_PATH
     - npm publish $SOLUTION_PATH --registry=$NPM_SOURCE_URL
+    
   only:
     refs:
       - master
@@ -33,3 +35,4 @@ test:
   only:
     variables:
       - $PROJECT_PATH_TEST && $SOLUTION_PATH
+      
