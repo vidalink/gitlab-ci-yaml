@@ -11,6 +11,8 @@ quality:
     entrypoint: [""]
   script:
     - apt-get update && apt-get install -y openjdk-8-jdk
+    - export TZ=America/Sao_Paulo
+    - echo $TZ > /etc/timezone && apt-get update && apt-get install -y tzdata && rm /etc/localtime && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && dpkg-reconfigure -f noninteractive tzdata && apt-get clean
     - dotnet tool install --global dotnet-sonarscanner
     - export PATH=${PATH}:/root/.dotnet/tools
     - dotnet sonarscanner begin /k:"vdlk-${CI_PROJECT_ID}" /n:"${CI_PROJECT_PATH_SLUG}" /d:sonar.host.url="${SONAR_HOST_URL}" /d:sonar.language="cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*" /d:sonar.login="${SONAR_LOGIN}"  /d:sonar.cs.opencover.reportsPaths="${PROJECT_TEST_PATH}/coverage.opencover.xml" /d:sonar.coverage.exclusions="**Test*.cs,Program.cs"
