@@ -22,9 +22,5 @@ quality:
   only:
     refs:
       - branches
-  except:
-    refs:
-      - master
-      - SWAGGERHUB
   artifacts:
     expire_in: 1 hour
