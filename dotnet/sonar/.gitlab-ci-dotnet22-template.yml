@@ -24,3 +24,4 @@ quality:
       - branches
   artifacts:
     expire_in: 1 hour
+  allow_failure: true
