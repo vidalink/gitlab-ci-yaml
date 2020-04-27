@@ -1,0 +1,19 @@
+stages:
+  - rollback
+
+.rollback: &rollback
+  stage: rollback
+  image: google/cloud-sdk:latest
+  before_script:
+    # prepara arquivo para autenticar no gcloud
+    - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
+    - echo ${GCLOUD_SERVICE_ACCOUNT} > ${TMP_FILE}
+    # faz autenticação no gcloud
+    - gcloud auth activate-service-account --key-file ${TMP_FILE}
+    - gcloud config set project ${PROJECT_ID}
+    # configura o cluster que vai trabalhar
+    - gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE} --project ${PROJECT_ID}
+  script: 
+    - kubectl describe ${DEPLOYMENT_NAME} -n ${CI_PROJECT_NAME}-${CI_PROJECT_ID} | grep "deployment.kubernetes.io/revision:" 
+    - kubectl rollout undo ${DEPLOYMENT_NAME} -n ${CI_PROJECT_NAME}-${CI_PROJECT_ID}
+  when: manual
