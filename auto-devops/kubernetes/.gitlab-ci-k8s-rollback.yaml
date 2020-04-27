@@ -1,7 +1,7 @@
 stages:
   - rollback
 
-.rollback: &rollback
+.kubectl-rollback: &rollback
   stage: rollback
   image: google/cloud-sdk:latest
   before_script:
