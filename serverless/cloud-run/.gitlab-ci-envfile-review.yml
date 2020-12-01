@@ -24,8 +24,6 @@ build:
   image: docker:stable
   services:
     - docker:18-dind
-    env_file:
-      - .env.${CI_JOB_STAGE}
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
