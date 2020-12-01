@@ -1,4 +1,4 @@
-image: alpine2:latest
+image: alpine:latest
 
 before_script:
   - if [ ! $TIMEOUT ]; then export TIMEOUT='2m'; fi
@@ -36,7 +36,7 @@ build:
       - master
 
 .deployng: &deploy-env
-  image: google/cloud-sdk:latest
+  image: google/cloud-sdk2:latest
   script:
     - export TMP_FILE=/tmp/${CI_PIPELINE_ID}.json
     - export TAG=gcr.io/${CLOUDSDK_CORE_PROJECT}/${RUN_NAME}:${CI_PIPELINE_ID}
