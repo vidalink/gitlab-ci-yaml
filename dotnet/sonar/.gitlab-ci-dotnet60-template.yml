@@ -10,7 +10,7 @@ quality:
     name: mcr.microsoft.com/dotnet/sdk:6.0-focal
     entrypoint: [""]
   script:
-    - apt-get update && apt-get install -y openjdk-8-jdk libgdiplus && apt-get install -y libc-dev
+    - apt-get update && apt-get install -y openjdk-8-jdk libgdiplus && apt-get install -y libc-dev & apt-get install -y apt-transport-https && apt-get update && apt-get install -y aspnetcore-runtime-6.0
     - dotnet tool install --global dotnet-sonarscanner --version 5.5.3
     - export PATH=${PATH}:/root/.dotnet/tools
     - dotnet sonarscanner begin /k:"vdlk-${CI_PROJECT_ID}" /n:"${CI_PROJECT_PATH_SLUG}" /d:sonar.host.url="${SONAR_HOST_URL}" /d:sonar.language="cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*" /d:sonar.login="${SONAR_LOGIN}"  /d:sonar.cs.opencover.reportsPaths="${PROJECT_TEST_PATH}/coverage.opencover.xml" /d:sonar.coverage.exclusions="**Test*.cs,Program.cs"
