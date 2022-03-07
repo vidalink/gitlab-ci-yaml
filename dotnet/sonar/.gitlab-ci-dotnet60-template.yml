@@ -7,7 +7,7 @@ stages:
 quality:
   stage: quality gate
   image:
-    name: mcr.microsoft.com/dotnet/sdk:6.0
+    name: mcr.microsoft.com/dotnet/sdk:6.0-focal
     entrypoint: [""]
   script:
     - apt-get update && apt-get install -y openjdk-8-jdk
